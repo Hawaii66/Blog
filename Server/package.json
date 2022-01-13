@@ -1,0 +1,22 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "Server for HawaiiDev blog and other blogs",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "nodemon --exec ts-node src/index.ts",
+        "build": "tsc",
+        "teststart": "ts-node-dev --respawn src/index.ts",
+        "postinstall": "npm run build"
+    },
+    "author": "HawaiiDev/Sebastian Ahlman",
+    "license": "ISC",
+    "devDependencies": {
+        "typescript": "^4.5.4"
+    },
+    "dependencies": {
+        "nodemon": "^2.0.15",
+        "ts-node": "^10.4.0"
+    }
+}
