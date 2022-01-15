@@ -1,16 +1,16 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { EditorSettings } from './Blog';
-import { BlogImageInterface } from '../../Interfaces/BlogInterface'
+import { BlogImageInterface, BlogInterface } from '../../Interfaces/BlogInterface'
 import BlogImageModal from './BlogImageModal';
 
 export interface Props{
     image:BlogImageInterface|null,
     dir:"left"|"right",
     editorSettings:EditorSettings,
-    setEditorSettings:React.Dispatch<React.SetStateAction<EditorSettings>>
+    index:number
 }
 
-function BlogImage({image, dir, editorSettings, setEditorSettings}:Props) {
+function BlogImage({image, dir, editorSettings, index}:Props) {
     const [initPosX, setInitPosX] = useState<number>(0);
     const [initPosY, setInitPosY] = useState<number>(0);
     const [initSizeX, setInitSizeX] = useState<undefined|number>(0);
@@ -94,7 +94,7 @@ function BlogImage({image, dir, editorSettings, setEditorSettings}:Props) {
                 />
             </div>
 
-            {showSettings && <BlogImageModal setShow={setShowSettings}/>}
+            {showSettings && <BlogImageModal dir={dir} index={index} setShow={setShowSettings}/>}
         </div>
     )
 }
