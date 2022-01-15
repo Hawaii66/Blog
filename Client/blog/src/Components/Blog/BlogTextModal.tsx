@@ -43,7 +43,6 @@ function BlogTextModal({setShow, index}:Props) {
             }
             if(fileInputRefLeft !== null && fileInputRefLeft.current !== null && fileInputRefLeft.current.value !== "")
             {
-                console.log(fileInputRefLeft);
                 info.content[index].imgLeft.link = await postImage("left");
             }
         }else{
@@ -60,7 +59,6 @@ function BlogTextModal({setShow, index}:Props) {
             }
             if(fileInputRefRight !== null && fileInputRefRight.current !== null && fileInputRefRight.current.value !== "")
             {
-                console.log(fileInputRefRight);
                 info.content[index].imgRight.link = await postImage("right");
             }
         }else{
@@ -68,8 +66,6 @@ function BlogTextModal({setShow, index}:Props) {
         }
         setBlogPost(info);
         setShow(false);
-        
-        console.log(info);
     }
 
     useEffect(()=>{

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Button, ButtonGroup } from 'react-bootstrap'
+import React, { useState, useContext } from 'react'
 import { BlogContentInterface } from '../../Interfaces/BlogInterface'
-import { EditorSettings } from './Blog'
+import { BlogContext, EditorSettings } from './Blog'
+import BlogEditorButtons from './BlogEditorButtons'
 import BlogImage from './BlogImage'
 import BlogTextModal from './BlogTextModal'
 
@@ -17,34 +17,21 @@ function BlogContent({content, index, editorSettings, setEditorSettings}:Props) 
     //FIrst correct huffman: "TTTWWhH1111111111111111111111111111111111111111111111111111"
     const [showPModal, setShowP] = useState(false);
 
-    const save = () => {
-        console.log("Save");
-    }
-
-    const createAbove = () => {
-
-    }
-
-    const remove = () => {
-
-    }
-
     return (
         <div>
             <div key={index} style={{width:"1500px",margin:"auto",overflow:"auto"}}>
-                
-                <h2 onClick={()=>setShowP(true)} style={{textAlign:"center",margin:"0.8em",borderBottom:"1px solid black"}}>{content.title}</h2>
+                <div style={{margin:"0.8em",display:"flex",alignItems:"center"}}>
+                    <h2 onClick={()=>setShowP(true)} style={{display:"inline-block",margin:"auto",marginTop:"2rem",textAlign:"center",borderBottom:"1px solid black"}}>
+                        {content.title}
+                    </h2>
+                    {editorSettings.isEditor && <BlogEditorButtons saveButtonPressed={()=>console.log("Error")} lastToggle={false} index={index}/>}
+                </div>
                 <BlogImage index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
                 <BlogImage index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
                 <p onClick={()=>setShowP(true)} style={{minHeight:"120px", margin:"2rem"}}>{content.text}</p>
-                {showPModal && <BlogTextModal index={index} setShow={setShowP} />}
+                {showPModal && editorSettings.isEditor && <BlogTextModal index={index} setShow={setShowP} />}
 
             </div>
-            <ButtonGroup aria-label="Knappar">
-                <Button onClick={save} variant="primary">Spara</Button>
-                <Button onClick={remove} variant="danger">Ta bort</Button>
-                <Button onClick={createAbove} variant="secondary">Skapa sektion över</Button>
-            </ButtonGroup>
         </div>
     )
 }
