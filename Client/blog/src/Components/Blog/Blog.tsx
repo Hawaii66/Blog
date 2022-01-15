@@ -3,6 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap'
 import { BlogInterface } from '../../Interfaces/BlogInterface';
 import BlogContent from './BlogContent';
 
+import "./Blog.css";
+
 function Blog() {
     const blogPost:BlogInterface = {
         title:"First blog post",
@@ -63,13 +65,9 @@ function Blog() {
                 {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
             </p>
             {blogPost.content.map((item,index)=>{
-                if(index < 1){
-
                 return(
                     <BlogContent key={index} content={item} index={index} />
                 )
-                }
-                return(<></>)
             })}
         </div>
     )
