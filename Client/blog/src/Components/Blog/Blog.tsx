@@ -63,9 +63,13 @@ function Blog() {
                 {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
             </p>
             {blogPost.content.map((item,index)=>{
+                if(index < 1){
+
                 return(
-                    <BlogContent content={item} index={index} />
+                    <BlogContent key={index} content={item} index={index} />
                 )
+                }
+                return(<></>)
             })}
         </div>
     )

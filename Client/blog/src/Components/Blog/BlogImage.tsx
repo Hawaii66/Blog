@@ -12,10 +12,13 @@ function BlogImage({image, dir}:Props) {
     }
 
     return(
-        <img 
+        <img
+            key={image.link} 
             src={image.link} 
             alt={image.alt}
             style={{
+                objectFit:"cover",
+                objectPosition:"50% 50%",
                 margin:"1rem",
                 borderRadius:"25px",
                 float:dir,
