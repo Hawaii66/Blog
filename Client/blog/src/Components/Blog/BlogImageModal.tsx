@@ -5,11 +5,12 @@ import { BlogContext } from './Blog';
 export interface Props{
     setShow:React.Dispatch<React.SetStateAction<boolean>>
     index:number,
-    dir:"left"|"right"
+    dir:"left"|"right",
+    fileInputRef:React.RefObject<HTMLInputElement>
 }
 
-function BlogImageModal({index,dir,setShow}:Props) {
-    const fileInputRef = useRef<HTMLInputElement>(null);
+function BlogImageModal({index,dir,setShow,fileInputRef}:Props) {
+    //const fileInputRef = useRef<HTMLInputElement>(null);
 
     const updateShowSettings = (b:boolean) => {
         setShow(b);
@@ -42,15 +43,17 @@ function BlogImageModal({index,dir,setShow}:Props) {
     }
 
     return (
+        <Form.Group controlId="formFile" className="mb-3">
+            <Form.Label>Välj Bild</Form.Label>
+            <Form.Control ref={fileInputRef} accept='image/jpeg,image/png' type="file" />
+        </Form.Group>
+    )/*
             <Modal show={true} onHide={() => updateShowSettings(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Bild Inställningar</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Group controlId="formFile" className="mb-3">
-                        <Form.Label>Välj Bild</Form.Label>
-                        <Form.Control ref={fileInputRef} accept='image/jpeg,image/png' type="file" />
-                    </Form.Group>
+                    
                     
                     
                 </Modal.Body>
@@ -63,7 +66,7 @@ function BlogImageModal({index,dir,setShow}:Props) {
                     </Button>
                 </Modal.Footer>
             </Modal>
-    )
+    )*/
 }
 
 export default BlogImageModal

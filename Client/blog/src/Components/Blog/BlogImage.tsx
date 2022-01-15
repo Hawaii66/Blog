@@ -94,7 +94,7 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
                 />
             </div>
 
-            {showSettings && <BlogImageModal dir={dir} index={index} setShow={setShowSettings}/>}
+            {/*showSettings && <BlogImageModal dir={dir} index={index} setShow={setShowSettings}/>*/}
         </div>
     )
 }
