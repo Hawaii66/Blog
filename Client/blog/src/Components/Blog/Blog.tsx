@@ -1,11 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { BlogInterface } from '../../Interfaces/BlogInterface';
 import BlogContent from './BlogContent';
 
 import "./Blog.css";
 
+export interface EditorSettings {
+    isEditor:boolean,
+    currentImage:{
+        element:HTMLImageElement|null,
+    }
+}
+
 function Blog() {
+    const [editorSettings, setEditorSettings] = useState<EditorSettings>({
+        currentImage:{
+            element:null
+        },
+        isEditor:true
+    });
+
     const blogPost:BlogInterface = {
         title:"First blog post",
         author:"HawaiiDev",
@@ -66,7 +80,7 @@ function Blog() {
             </p>
             {blogPost.content.map((item,index)=>{
                 return(
-                    <BlogContent key={index} content={item} index={index} />
+                    <BlogContent setEditorSettings={setEditorSettings} editorSettings={editorSettings} key={index} content={item} index={index} />
                 )
             })}
         </div>

@@ -1,26 +1,32 @@
 import React, { useCallback, useRef, useState } from 'react'
+import { EditorSettings } from './Blog';
 import { BlogImageInterface } from '../../Interfaces/BlogInterface'
+import BlogImageModal from './BlogImageModal';
 
 export interface Props{
     image:BlogImageInterface|null,
-    dir:"left"|"right"
+    dir:"left"|"right",
+    editorSettings:EditorSettings,
+    setEditorSettings:React.Dispatch<React.SetStateAction<EditorSettings>>
 }
 
-function BlogImage({image, dir}:Props) {
+function BlogImage({image, dir, editorSettings, setEditorSettings}:Props) {
     const [initPosX, setInitPosX] = useState<number>(0);
     const [initPosY, setInitPosY] = useState<number>(0);
     const [initSizeX, setInitSizeX] = useState<undefined|number>(0);
     const [initSizeY, setInitSizeY] = useState<undefined|number>(0);
+    const [showSettings, setShowSettings] = useState(false);
 
     const [imageX, setImageX] = useState<string>((image === null) ? "0" : image?.sizeX);
     const [imageY, setImageY] = useState<string>((image === null) ? "0" : image?.sizeY);
 
     const resizeRef = useRef<HTMLImageElement>(null);
-    const resizeButton = useRef<HTMLDivElement>(null);
     
     const initial = (e:any) => {
+        if(!editorSettings.isEditor){return;}
+
         let resizable = resizeRef.current;
-        if(resizable === null || e === undefined){return;}
+        if(resizable === null || e === undefined){return;} 
         
         if(dir === "left"){
             setInitSizeX(resizable.offsetWidth);
@@ -36,6 +42,8 @@ function BlogImage({image, dir}:Props) {
     }
 
     const resize = (e:any) => {
+        if(!editorSettings.isEditor){return;}
+
         let resizable = resizeRef.current;
         if(resizable === null || initSizeX === undefined || initSizeY === undefined){return;}
 
@@ -49,6 +57,10 @@ function BlogImage({image, dir}:Props) {
         setImageY(`${initSizeY + e.clientY - initPosY}px`);
     }
 
+    const updateShowSettings = (b:boolean) => {
+        setShowSettings(b);
+    }
+
     if(image == null){
         return <></>
     }
@@ -60,10 +72,11 @@ function BlogImage({image, dir}:Props) {
                 onDragStart={initial}
                 onDrag={resize}
                 onDragEnd={resize}
+                onClick={() => updateShowSettings(!showSettings)}
                 style={{cursor:"none"}}
             >
                 <img
-                    className='Image'
+                    className="Image"
                     ref={resizeRef}
                     key={image.link} 
                     src={image.link} 
@@ -80,6 +93,8 @@ function BlogImage({image, dir}:Props) {
                     draggable="false"
                 />
             </div>
+
+            {showSettings && <BlogImageModal setShow={setShowSettings}/>}
         </div>
     )
 }
