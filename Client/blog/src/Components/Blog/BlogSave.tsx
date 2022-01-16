@@ -1,17 +1,32 @@
-import React, {useRef} from 'react'
+import React, {useRef,useContext} from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
+import { BlogInterface } from '../../Interfaces/BlogInterface';
+import { BlogContext } from './Blog';
 
 export interface Props{
     setShow:React.Dispatch<React.SetStateAction<boolean>>
 }
 
 function BlogSave({setShow}:Props) {
+    const {blogPost, setBlogPost} = useContext(BlogContext);
+
     const cancelSave = () => {
         setShow(false);
     }
 
     const save = () => {
+        if(nameRef === null || nameRef.current === null){return;}
+        if(blogPost === null){return null;}
 
+        var name = nameRef.current.value;
+
+        var info:BlogInterface = {
+            author:blogPost.author,
+            content:[...blogPost.content],
+            language:blogPost?.language,
+            publishDate:Date.now(),
+            title:name
+        }
     }
 
     const nameRef = useRef<HTMLInputElement>(null);

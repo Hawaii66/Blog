@@ -1,4 +1,5 @@
 import {Express, Request, Response} from "express";
+import { AuthRoutes } from "./AuthRoutes";
 
 const multer = require("multer");
 const upload = multer({dest:"uploads/"});
@@ -35,4 +36,6 @@ export const Routes = (app:Express) => {
 
         readStream.pipe(res);
     });
+
+    AuthRoutes(app);
 }
