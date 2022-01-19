@@ -28,6 +28,8 @@ function App() {
       microsoftID:user.microsoftID
     }
 
+    console.log(data);
+
     sendData = {
       microsoftID:user.microsoftID+"1",
       id:"1642324962119:344877:user"
