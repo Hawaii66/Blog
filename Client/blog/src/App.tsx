@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Blog from './Components/Blog/Blog';
 import MicrosoftLogin from 'react-microsoft-login';
 import { User } from './Interfaces/UserInterface';
 import { UserContext } from './Contexts/UserContext';
+import { StaticContext } from './Contexts/StaticContext';
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -10,6 +11,8 @@ function App() {
   const [user, setUser] = useState<User|null>(null);
 
   const microsoftID = process.env.REACT_APP_MICROSOFT_LOGIN || "";
+
+  const {apiEndPoint} = useContext(StaticContext);
 
   const login = async (err:any, data:any) => {
       if(err !== null){
@@ -27,12 +30,12 @@ function App() {
         email:data.account.userName
       }
   
-      var loginResult = await GetUserTokens(sendData);
+      var loginResult = await GetUserTokens(sendData, apiEndPoint);
       
       var newUser:User|null = null;
       if(loginResult === null){
-        newUser = await CreateUser(data);
-        loginResult = await GetUserTokens(sendData);
+        newUser = await CreateUser(data, apiEndPoint);
+        loginResult = await GetUserTokens(sendData, apiEndPoint);
         if(loginResult === null){return "";}
       }
 
@@ -40,7 +43,7 @@ function App() {
       setAccessToken(tokens.accessToken);
       setRefreshToken(tokens.refreshToken);
 
-      const userResult = await fetch("http://localhost:5000/users/get",{
+      const userResult = await fetch(`${apiEndPoint}/users/get`,{
         method:"GET",
         headers:{
           "Authorization": "Bearer " + tokens.accessToken
@@ -59,7 +62,7 @@ function App() {
       token:refreshToken
     }
 
-    const result = await fetch("http://localhost:5000/users/token",{
+    const result = await fetch(`${apiEndPoint}/users/token`,{
       method:"POST",
       body:JSON.stringify(sendData),
       headers:{
@@ -87,14 +90,14 @@ function App() {
   );
 }
 
-async function CreateUser(data:any):Promise<User|null>{
+async function CreateUser(data:any,apiEndPoint:string):Promise<User|null>{
   const sendData:any = {
     email:data.account.userName,
     name:data.account.name,
     microsoftID:data.id
   }
 
-  fetch("http://localhost:5000/users/create",{
+  fetch(`${apiEndPoint}/users/create`,{
     method:"POST",
     body:JSON.stringify(sendData),
     headers:{
@@ -106,8 +109,8 @@ async function CreateUser(data:any):Promise<User|null>{
   return null;
 }
 
-async function GetUserTokens(payload:any):Promise<{accessToken:string,refreshToken:string}|null>{
-  const response = await fetch("http://localhost:5000/users/login/microsoft",{
+async function GetUserTokens(payload:any,apiEndPoint:string):Promise<{accessToken:string,refreshToken:string}|null>{
+  const response = await fetch(`${apiEndPoint}/users/login/microsoft`,{
     method:"POST",
     body:JSON.stringify(payload),
     headers:{
