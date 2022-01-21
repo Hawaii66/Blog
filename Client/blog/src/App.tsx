@@ -6,6 +6,7 @@ import { UserContext } from './Contexts/UserContext';
 import { StaticContext } from './Contexts/StaticContext';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { useQuery } from './Utils/Hooks';
+import UserHome from './Components/User/UserHome';
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -23,7 +24,7 @@ function App() {
       if(err !== null){
         return;
       }
-
+      console.log(data);
       if(accessToken !== "" && refreshToken !== ""){
         return;
       }
@@ -89,6 +90,10 @@ function App() {
             <Route 
               path="/view"
               element={<Blog/>}
+            />
+            <Route
+              path="/author" 
+              element={<UserHome/>}
             />
           </Routes>
       </UserContext.Provider>

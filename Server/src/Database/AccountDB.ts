@@ -13,6 +13,7 @@ type GetUserMicrosoft = (id:string) => Promise<User|null>;
 type SetRefreshTokenType = (token:string) => Promise<void>;
 type HasRefershTokenType = (token:string) => Promise<boolean>;
 type RemoveRefreshTokenType = (token:string) => Promise<void>;
+type AddBlogType = (userID:string,blogID:string) => Promise<void>;
 
 export const CreateUser:CreateUserType = async (user:User) => {
     var newUser:User = await users.insert(user);
@@ -38,6 +39,16 @@ export const GetUserMicrosoftID:GetUserMicrosoft = async (id:string)=>{
     var user:User = await users.findOne({microsoftID:id.toString()});
     if(user === null){return null;}
     return user;
+}
+
+export const UserAddBlog:AddBlogType = async (userID,blogID) => {
+    var user:User = await users.findOne({id:userID});
+    if(user === null){return;}
+
+    var blogs:string[] = [...user.blogs];
+    blogs.push(blogID);
+    user.blogs = blogs;
+    await users.findOneAndUpdate({id:userID},{$set:user});
 }
 
 export const UserIDExists:UserIDType = async (id:string) => {
