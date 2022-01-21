@@ -27,6 +27,8 @@ function BlogSave({setShow}:Props) {
             publishDate:Date.now(),
             title:name
         }
+
+        console.log(info);
     }
 
     const nameRef = useRef<HTMLInputElement>(null);

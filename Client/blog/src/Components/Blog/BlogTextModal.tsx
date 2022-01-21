@@ -17,6 +17,8 @@ function BlogTextModal({setShow, index}:Props) {
     const fileInputRefRight = useRef<HTMLInputElement>(null);
     const leftImgRef = useRef<HTMLInputElement>(null);
     const rightImgRef = useRef<HTMLInputElement>(null);
+    const leftAltRef = useRef<HTMLInputElement>(null);
+    const rightAltRef = useRef<HTMLInputElement>(null);
 
     const updateShowSettings = (b:boolean) => {
         setShow(b);
@@ -27,6 +29,8 @@ function BlogTextModal({setShow, index}:Props) {
         if(titleRef === null || titleRef.current === null || titleRef.current.value === null){return;}
         if(leftImgRef === null || leftImgRef.current === null || leftImgRef.current.value === null){return;}
         if(rightImgRef === null || rightImgRef.current === null || rightImgRef.current.value === null){return;}
+        if(leftAltRef === null || leftAltRef.current === null || leftAltRef.current.value === null){return;}
+        if(rightAltRef === null || rightAltRef.current === null || rightAltRef.current.value === null){return;}
 
         var info:any = blogPost;
 
@@ -45,6 +49,7 @@ function BlogTextModal({setShow, index}:Props) {
             {
                 info.content[index].imgLeft.link = await postImage("left");
             }
+            info.content[index].imgLeft.text = leftAltRef.current.value;
         }else{
             info.content[index].imgLeft = null;
         }
@@ -61,8 +66,9 @@ function BlogTextModal({setShow, index}:Props) {
             {
                 info.content[index].imgRight.link = await postImage("right");
             }
+            info.content[index].imgRight.text = rightAltRef.current.value;
         }else{
-        info.content[index].imgRight = null;
+            info.content[index].imgRight = null;
         }
         setBlogPost(info);
         setShow(false);
@@ -123,6 +129,7 @@ function BlogTextModal({setShow, index}:Props) {
                                 ref={leftImgRef} 
                                 type={"checkbox"}
                             />
+                            <Form.Control ref={leftAltRef} type="text" placeholder='Alternativ Text' />
                             <Form.Group controlId="formFile" className="mb-3">
                                 <Form.Control ref={fileInputRefLeft} accept='image/jpeg,image/png' type="file" />
                             </Form.Group>
@@ -133,6 +140,7 @@ function BlogTextModal({setShow, index}:Props) {
                                 ref={rightImgRef}
                                 type={"checkbox"}
                             />
+                            <Form.Control ref={rightAltRef} type="text" placeholder='Alternativ Text' />
                             <Form.Group controlId="formFile" className="mb-3">
                                 <Form.Control ref={fileInputRefRight} accept='image/jpeg,image/png' type="file" />
                             </Form.Group>
