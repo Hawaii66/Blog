@@ -4,6 +4,7 @@ import MicrosoftLogin from 'react-microsoft-login';
 import { User } from './Interfaces/UserInterface';
 import { UserContext } from './Contexts/UserContext';
 import { StaticContext } from './Contexts/StaticContext';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -54,38 +55,24 @@ function App() {
       }
     }
 
-  const getNewToken = async () => {
-    if(user === null){return "";}
-    if(refreshToken === ""){return "";}
-
-    const sendData = {
-      token:refreshToken
-    }
-
-    const result = await fetch(`${apiEndPoint}/users/token`,{
-      method:"POST",
-      body:JSON.stringify(sendData),
-      headers:{
-        "Content-Type":"application/json"
-      }
-    });
-    if(result.status === 403){
-      return "";
-    }
-
-    const newToken = (await result.json()).accessToken;
-    setAccessToken(newToken);
-
-    return newToken;
+  const updateAccessToken = async() => {
+    const token = await UpdateAccessToken(refreshToken,apiEndPoint)
+    setAccessToken(token);
+    return token;
   }
 
   return (
     <div className="App">
-      <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:getNewToken}}>
-        Hello World!
-        {user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login}  withUserData/>}
-        <Blog/>
-      </UserContext.Provider>
+      <Router>
+        <Routes>
+          <Route path="/" element={
+          <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
+            Hello World!
+            {user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login}  withUserData/>}
+            <Blog/>
+          </UserContext.Provider>}/>
+        </Routes>
+      </Router>
     </div>
   );
 }
@@ -125,6 +112,24 @@ async function GetUserTokens(payload:any,apiEndPoint:string):Promise<{accessToke
     accessToken:tokens.accessToken,
     refreshToken:tokens.refreshToken
   }
+}
+
+async function UpdateAccessToken(refreshToken:string,apiEndPoint:string):Promise<string> {
+  const result = await fetch(`${apiEndPoint}/users/token`,{
+    method:"POST",
+    body:JSON.stringify({
+      token:refreshToken
+    }),
+    headers:{
+      "Content-Type":"application/json"
+    }
+  });
+
+  if(result.status === 200){
+    return (await result.json()).accessToken;
+  }
+
+  return "";
 }
 
 export default App;

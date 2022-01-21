@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect, useContext } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { BlogInterface } from '../../Interfaces/BlogInterface';
 import BlogContent from './BlogContent';
@@ -6,6 +6,9 @@ import BlogContent from './BlogContent';
 import "./Blog.css";
 import BlogEditorButtons from './BlogEditorButtons';
 import BlogSave from './BlogSave';
+import { UserContext } from '../../Contexts/UserContext';
+import { StaticContext } from '../../Contexts/StaticContext';
+import { useLocation } from 'react-router-dom';
 
 export interface EditorSettings {
     isEditor:boolean
@@ -72,15 +75,23 @@ export const BlogContext = createContext<BlogContextInterface>(
 }
 */
 
+function useQuery() {
+    const { search } = useLocation();
+  
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 function Blog() {
     const [editorSettings, setEditorSettings] = useState<EditorSettings>({
         isEditor:true
     });
-
     const [showSaveWindow, setShowSaveWindow] = useState(false);
+    
+    let query = useQuery();
 
     const [blogPost, setBlogPost] = useState<BlogInterface>({title:"First blog post",
         author:"HawaiiDev",
+        id:"1",
         publishDate:Date.now(),
         language:"EN",        
         content:[
@@ -124,9 +135,23 @@ function Blog() {
             },
         ]
     });
+    
+    const { apiEndPoint } = useContext(StaticContext);
+    const {accessToken,refreshToken} = useContext(UserContext);
 
     useEffect(()=>{
-        console.log(blogPost);
+        const getBlog = async () => {
+            if(blogPost.id === "1"){ //TODO Remove 1 before deploy
+                const id = query.get("id");
+                if(id === null){return;}
+
+                setBlogPost(await GetBlogWithID(id, apiEndPoint));
+            }
+        }
+        getBlog()
+    },[]);
+
+    useEffect(()=>{
     },[blogPost])
 
     const setPost = (post:BlogInterface) => {
@@ -135,7 +160,8 @@ function Blog() {
             author:post.author,
             publishDate:post.publishDate,
             language:post.language,
-            content:[...post.content]
+            content:[...post.content],
+            id:post.id
         }
         setBlogPost(temp);
     }
@@ -166,6 +192,49 @@ function Blog() {
             </BlogContext.Provider>
         </div>
     )
+}
+
+function GetBlogWithID(id:string, apiEndPoint:string):Promise<BlogInterface>{
+    const blog = fetch(`${apiEndPoint}/blog/${id}`,{
+        method:"GET"
+    }).then(res => res.json());
+
+    return blog;
+}
+
+type CloudSaveType = (blogPost:BlogInterface, apiEndPoint:string,accessToken:string,updateRefresh:()=>Promise<string>) => Promise<BlogInterface>
+
+export const CloudSave:CloudSaveType = async(blogPost,apiEndPoint,accessToken,updateRefresh)=> {
+    const data = {
+        blog:blogPost,
+        id:blogPost.id
+    }
+
+    var saveResult = await fetch(`${apiEndPoint}/blog/save`,{
+        method:"POST",
+        body: JSON.stringify(data),
+        headers:{
+            "Authorization":`Bearer ${accessToken}`,
+            "Content-Type":"application/json"
+        }
+    });
+
+    if(saveResult.status !== 200){
+        accessToken = await updateRefresh();
+        await fetch(`${apiEndPoint}/blog/save`,{
+            method:"POST",
+            body: JSON.stringify(data),
+            headers:{
+                "Authorization":`Bearer ${accessToken}`,
+                "Content-Type":"application/json"
+            }
+        });
+    }
+
+    const newBlogPost = await saveResult.json();
+
+    console.log(newBlogPost);
+    return newBlogPost;
 }
 
 export default Blog

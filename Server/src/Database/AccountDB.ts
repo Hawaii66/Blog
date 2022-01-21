@@ -9,6 +9,7 @@ type UserIDType = (id:string) => Promise<boolean>;
 type CreateUserType = (user:User) => Promise<User>;
 type GetUserType = (id:string) => Promise<User|null>;
 type GetUserEmail = (email:string) => Promise<User|null>;
+type GetUserMicrosoft = (id:string) => Promise<User|null>;
 type SetRefreshTokenType = (token:string) => Promise<void>;
 type HasRefershTokenType = (token:string) => Promise<boolean>;
 type RemoveRefreshTokenType = (token:string) => Promise<void>;
@@ -29,6 +30,12 @@ export const GetUser:GetUserType = async (id:string) => {
 
 export const GetUserEmail:GetUserEmail = async (id:string)=>{
     var user:User = await users.findOne({email:id.toString()});
+    if(user === null){return null;}
+    return user;
+}
+
+export const GetUserMicrosoftID:GetUserMicrosoft = async (id:string)=>{
+    var user:User = await users.findOne({microsoftID:id.toString()});
     if(user === null){return null;}
     return user;
 }

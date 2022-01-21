@@ -1,7 +1,8 @@
 import React, { useContext, useRef, useEffect } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
-import { BlogContext } from './Blog';
-import BlogImageModal from './BlogImageModal';
+import { StaticContext } from '../../Contexts/StaticContext';
+import { UserContext } from '../../Contexts/UserContext';
+import { BlogContext, CloudSave } from './Blog';
 
 export interface Props{
     setShow:React.Dispatch<React.SetStateAction<boolean>>,
@@ -10,6 +11,8 @@ export interface Props{
 
 function BlogTextModal({setShow, index}:Props) {
     const {blogPost,setBlogPost} = useContext(BlogContext);
+    const {apiEndPoint} = useContext(StaticContext);
+    const {accessToken,refreshToken} = useContext(UserContext);
 
     const textRef = useRef<HTMLTextAreaElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
@@ -70,7 +73,11 @@ function BlogTextModal({setShow, index}:Props) {
         }else{
             info.content[index].imgRight = null;
         }
-        setBlogPost(info);
+
+        if(info === null){return;}
+
+        setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));
+
         setShow(false);
     }
 

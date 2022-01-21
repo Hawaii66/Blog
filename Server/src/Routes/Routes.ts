@@ -1,5 +1,6 @@
 import {Express, Request, Response} from "express";
 import { AuthRoutes } from "./AuthRoutes";
+import { BlogRoutes } from "./BlogRoutes";
 
 const multer = require("multer");
 const upload = multer({dest:"uploads/"});
@@ -38,4 +39,5 @@ export const Routes = (app:Express) => {
     });
 
     AuthRoutes(app);
+    BlogRoutes(app);
 }

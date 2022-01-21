@@ -10,11 +10,12 @@ export interface Props{
 function BlogSave({setShow}:Props) {
     const {blogPost, setBlogPost} = useContext(BlogContext);
 
+    
     const cancelSave = () => {
         setShow(false);
     }
 
-    const save = () => {
+    const save = async () => {
         if(nameRef === null || nameRef.current === null){return;}
         if(blogPost === null){return null;}
 
@@ -25,10 +26,13 @@ function BlogSave({setShow}:Props) {
             content:[...blogPost.content],
             language:blogPost?.language,
             publishDate:Date.now(),
-            title:name
+            title:name,
+            id:""
         }
 
-        console.log(info);
+        console.log(info,"tset");
+
+        
     }
 
     const nameRef = useRef<HTMLInputElement>(null);

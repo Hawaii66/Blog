@@ -105,7 +105,6 @@ export function AuthToken(req:Request,res:Response,next:NextFunction){
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err:any,user:any)=>{
         if(err) {
-            console.log(err, token);
             return res.sendStatus(403);
         }
 
