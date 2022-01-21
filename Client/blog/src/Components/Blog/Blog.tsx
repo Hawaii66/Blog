@@ -9,6 +9,7 @@ import BlogSave from './BlogSave';
 import { UserContext } from '../../Contexts/UserContext';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { useLocation } from 'react-router-dom';
+import { useQuery } from '../../Utils/Hooks';
 
 export interface EditorSettings {
     isEditor:boolean
@@ -75,15 +76,9 @@ export const BlogContext = createContext<BlogContextInterface>(
 }
 */
 
-function useQuery() {
-    const { search } = useLocation();
-  
-    return React.useMemo(() => new URLSearchParams(search), [search]);
-}
-
 function Blog() {
     const [editorSettings, setEditorSettings] = useState<EditorSettings>({
-        isEditor:true
+        isEditor:false
     });
     const [showSaveWindow, setShowSaveWindow] = useState(false);
     
@@ -136,7 +131,7 @@ function Blog() {
         ]
     });
     
-    const { apiEndPoint } = useContext(StaticContext);
+    const { apiEndPoint,website } = useContext(StaticContext);
     const {accessToken,refreshToken} = useContext(UserContext);
 
     useEffect(()=>{
@@ -178,7 +173,7 @@ function Blog() {
                     style={{
                         textAlign:"center"
                     }}>
-                    <a href={"/author/"+blogPost.author}>{blogPost.author}</a>
+                    <a href={`${website}/?author=${blogPost.author}`}>{blogPost.author}</a>
                     {": "}
                     {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
                 </p>

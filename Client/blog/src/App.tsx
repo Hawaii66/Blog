@@ -1,15 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Blog from './Components/Blog/Blog';
 import MicrosoftLogin from 'react-microsoft-login';
 import { User } from './Interfaces/UserInterface';
 import { UserContext } from './Contexts/UserContext';
 import { StaticContext } from './Contexts/StaticContext';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { useQuery } from './Utils/Hooks';
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
   const [user, setUser] = useState<User|null>(null);
+
+  const query = useQuery();
+  const location = useLocation();
 
   const microsoftID = process.env.REACT_APP_MICROSOFT_LOGIN || "";
 
@@ -61,18 +65,33 @@ function App() {
     return token;
   }
 
+  useEffect(()=>{
+    const id = query.get("id");
+    const author = query.get("author");
+    if(location.pathname === "/" && id !== null){
+      window.location.href = `/view?id=${id}`;
+    }
+    if(location.pathname === "/" && author !== null){
+      window.location.href = `/author?author=${author}`;
+    }
+  },[location])
+
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={
-          <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
-            Hello World!
-            {user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login}  withUserData/>}
-            <Blog/>
-          </UserContext.Provider>}/>
-        </Routes>
-      </Router>
+      <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
+          Hello World!
+          {user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>}
+          <Routes>
+            <Route path="/" element={
+              <>
+              
+              </>}/>
+            <Route 
+              path="/view"
+              element={<Blog/>}
+            />
+          </Routes>
+      </UserContext.Provider>
     </div>
   );
 }
