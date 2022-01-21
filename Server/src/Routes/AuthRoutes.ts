@@ -73,12 +73,12 @@ export const AuthRoutes = (app:Express) => {
 
                 await SetToken(refreshToken);
 
-                res.status(200).json({accessToken:accessToken,refreshToken:refreshToken});
+                return res.status(200).json({accessToken:accessToken,refreshToken:refreshToken});
             }else{
-                res.status(400).send("Wrong auth");
+                return res.status(400).send("Wrong auth");
             }
         }catch{
-            res.status(500).send("Error logging in")
+            return res.status(500).send("Error logging in")
         }
     });
 }
