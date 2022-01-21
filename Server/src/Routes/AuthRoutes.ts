@@ -1,5 +1,6 @@
 import {Express, Request, Response, NextFunction} from "express";
-import { CreateUser, GetUser, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
+import { users } from "../Database/DatabaseAPI";
+import { CreateUser, GetUser, GetUserEmail, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
 import { TokenUser, User } from "../Interfaces/UserInterface";
 const bcrypt = require("bcrypt");
 
@@ -8,10 +9,11 @@ const jwt = require("jsonwebtoken");
 //var refreshTokens:string[] = [];
 
 export const AuthRoutes = (app:Express) => {
-    app.post("/users/create",async(req,res)=>{
+    app.post("/users/create", async(req,res)=>{
         try{
-            const hashedID = await bcrypt.hash(req.body.microsoftID, 10);
-
+            const hashedID = await GetHashedMicrosoftID(req.body.microsoftID);
+            //await bcrypt.hash(req.body.microsoftID, 10);
+            console.log(hashedID);
             var user:User = {
                 blogs:[],
                 email:req.body.email,
@@ -22,14 +24,19 @@ export const AuthRoutes = (app:Express) => {
             }
 
             user = await CreateUser(user);
-            res.status(201).json(user);
+            return res.status(201).json(user);
         } catch {
-            res.status(500).send("Error creating user")
+            return res.status(500).send("Error creating user")
         }
     });
 
     app.get("/users/test",AuthToken, (req,res)=>{
         res.send(req.id);
+    });
+
+    app.get("/users/get",AuthToken, async(req,res)=>{
+        const user:User|null = await users.findOne({microsoftID:req.id});
+        res.status(200).json(user);
     });
 
     app.delete("/users/delete", async (req,res)=>{
@@ -46,7 +53,7 @@ export const AuthRoutes = (app:Express) => {
             if(err){return res.sendStatus(403);}
 
             const tokenUser:TokenUser = {
-                id:user.id,
+                /*id:user.id,*/
                 microsoftID:user.microsoftID
             }
 
@@ -56,17 +63,19 @@ export const AuthRoutes = (app:Express) => {
     });
 
     app.post("/users/login/microsoft",async(req,res)=>{
-        const user = await GetUser(req.body.id);
+        /*const user = await GetUser(req.body.id);*/
+        const hashedID = await GetHashedMicrosoftID(req.body.microsoftID);
+        const user = await GetUserEmail(req.body.email);
         if(user === null)
         {
-            return res.status(400).send("No user found with ID: " + req.body.id);
+            return res.status(400).send("No user found with that ID");
         }
 
         try{
             if(await bcrypt.compare(req.body.microsoftID, user.microsoftID)){
                 const tokenUser:TokenUser = {
-                    microsoftID:req.body.microsoftID,
-                    id:req.body.id
+                    microsoftID:user.microsoftID/*,
+                    id:req.body.id*/
                 }
                 const accessToken = GenerateAccessToken(tokenUser);
                 const refreshToken = CreateJWT(tokenUser);
@@ -96,10 +105,11 @@ export function AuthToken(req:Request,res:Response,next:NextFunction){
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err:any,user:any)=>{
         if(err) {
+            console.log(err, token);
             return res.sendStatus(403);
         }
 
-        req.id = user.id;
+        req.id = user.microsoftID;
         next()
     });
 }
@@ -116,4 +126,8 @@ async function GetRandomUserID(){
     }
 
     return randomID;
+}
+
+async function GetHashedMicrosoftID(id:string):Promise<string> {
+    return await bcrypt.hash(id, 10);
 }

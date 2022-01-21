@@ -8,6 +8,6 @@ export interface User {
 }
 
 export interface TokenUser {
-    id:string,
+    /*id:string,*/
     microsoftID:string
 }

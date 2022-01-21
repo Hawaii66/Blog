@@ -6,3 +6,8 @@ export interface User {
     email:string,
     microsoftID:string
 }
+
+export interface TokenUser {
+    /*id:string,*/
+    microsoftID:string
+}

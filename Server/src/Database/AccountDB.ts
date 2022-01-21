@@ -5,16 +5,17 @@ import {db, tokens, users} from "./DatabaseAPI";
 //type GetUserType = (accountID: string)=> Promise<User|null>
 //type AddUserType = (user:User) =>Promise<User|null>
 
-type UserIDType = (id:string) => Promise<boolean>
-type CreateUserType = (user:User) => Promise<User>
-type GetUserType = (id:string) => Promise<User|null>
+type UserIDType = (id:string) => Promise<boolean>;
+type CreateUserType = (user:User) => Promise<User>;
+type GetUserType = (id:string) => Promise<User|null>;
+type GetUserEmail = (email:string) => Promise<User|null>;
 type SetRefreshTokenType = (token:string) => Promise<void>;
 type HasRefershTokenType = (token:string) => Promise<boolean>;
 type RemoveRefreshTokenType = (token:string) => Promise<void>;
 
 export const CreateUser:CreateUserType = async (user:User) => {
     var newUser:User = await users.insert(user);
-    console.log(newUser);
+    //console.log(newUser);
     return newUser;
 }
 
@@ -23,6 +24,12 @@ export const GetUser:GetUserType = async (id:string) => {
     if(user === null){
         return null;
     }
+    return user;
+}
+
+export const GetUserEmail:GetUserEmail = async (id:string)=>{
+    var user:User = await users.findOne({email:id.toString()});
+    if(user === null){return null;}
     return user;
 }
 
