@@ -1,5 +1,6 @@
+import { PrivateDnsNameOptionsRequest } from "aws-sdk/clients/ec2";
 import { User } from "../Interfaces/UserInterface";
-import {db, users} from "./DatabaseAPI";
+import {db, tokens, users} from "./DatabaseAPI";
 
 //type GetUserType = (accountID: string)=> Promise<User|null>
 //type AddUserType = (user:User) =>Promise<User|null>
@@ -7,26 +8,9 @@ import {db, users} from "./DatabaseAPI";
 type UserIDType = (id:string) => Promise<boolean>
 type CreateUserType = (user:User) => Promise<User>
 type GetUserType = (id:string) => Promise<User|null>
-
-/*export const GetUser:GetUserType = async (accountID: string)=>{
-    var dbAccount:User = await users.findOne({accountID: accountID.toString()});
-    if (dbAccount === null){
-        return null;
-    }
-
-    return dbAccount;
-}
-
-export const AddUser:AddUserType = async (user:User)=>{
-    let potentialUser:User | null = await GetUser(user.accountID);
-    if(potentialUser !== null){
-        return potentialUser;
-    }
-
-    potentialUser = await users.insert(user);
-    return potentialUser;
-    return null;
-}*/
+type SetRefreshTokenType = (token:string) => Promise<void>;
+type HasRefershTokenType = (token:string) => Promise<boolean>;
+type RemoveRefreshTokenType = (token:string) => Promise<void>;
 
 export const CreateUser:CreateUserType = async (user:User) => {
     var newUser:User = await users.insert(user);
@@ -49,4 +33,20 @@ export const UserIDExists:UserIDType = async (id:string) => {
     }
 
     return false;
+}
+
+export const SetToken:SetRefreshTokenType = async (token:string) => {
+    if(!await HasToken(token)){
+        await tokens.insert({token:token.toString()});
+    }
+    return;
+}
+
+export const HasToken:HasRefershTokenType = async (token:string) => {
+    var result:{token:string} = await tokens.findOne({token:token.toString()});
+    return result !== null;
+}
+
+export const RemoveToken:RemoveRefreshTokenType = async (token:string) => {
+    await tokens.findOneAndDelete({token:token.toString()});
 }
