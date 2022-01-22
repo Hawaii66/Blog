@@ -4,40 +4,49 @@ import MicrosoftLogin from 'react-microsoft-login';
 import { User } from './Interfaces/UserInterface';
 import { UserContext } from './Contexts/UserContext';
 import { StaticContext } from './Contexts/StaticContext';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { useQuery } from './Utils/Hooks';
 import UserHome from './Components/User/UserHome';
+import RouterApp from './Components/RouterApp';
+import { Spinner } from 'react-bootstrap';
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
   const [user, setUser] = useState<User|null>(null);
 
-  const query = useQuery();
-  const location = useLocation();
-
   const microsoftID = process.env.REACT_APP_MICROSOFT_LOGIN || "";
 
   const {apiEndPoint} = useContext(StaticContext);
+
+  const loginWrapper = async (err:boolean,data:{email:string|null,id:string|null}) => {
+    if(data.email === null || data.id === null){err = true;}
+    await login(err ? true : null, {
+      id:data.id,
+      account:{
+        userName:data.email
+      }
+    });
+  }
 
   const login = async (err:any, data:any) => {
       if(err !== null){
         return;
       }
-      console.log(data);
+      
       if(accessToken !== "" && refreshToken !== ""){
         return;
       }
 
       if(user !== null){return;}
-  
+      
       var sendData = {
         microsoftID:data.id,
         email:data.account.userName
       }
-  
+
       var loginResult = await GetUserTokens(sendData, apiEndPoint);
-      
+
       var newUser:User|null = null;
       if(loginResult === null){
         newUser = await CreateUser(data, apiEndPoint);
@@ -66,36 +75,34 @@ function App() {
     return token;
   }
 
-  useEffect(()=>{
-    const id = query.get("id");
-    const author = query.get("author");
-    if(location.pathname === "/" && id !== null){
-      window.location.href = `/view?id=${id}`;
+  if(user === null){
+    if(sessionStorage.getItem("msid") === null || sessionStorage.getItem("email") === null){
+      return(
+        <div className="App" style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>
+        </div>
+      )
+    }else{
+      loginWrapper(false,{
+        email:sessionStorage.getItem("email"),
+        id:sessionStorage.getItem("msid")
+      });
+      return(
+        <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      )
     }
-    if(location.pathname === "/" && author !== null){
-      window.location.href = `/author?author=${author}`;
-    }
-  },[location])
+  }
 
   return (
     <div className="App">
       <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
           Hello World!
           {user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>}
-          <Routes>
-            <Route path="/" element={
-              <>
-              
-              </>}/>
-            <Route 
-              path="/view"
-              element={<Blog/>}
-            />
-            <Route
-              path="/author" 
-              element={<UserHome/>}
-            />
-          </Routes>
+          <Router><RouterApp/></Router>
       </UserContext.Provider>
     </div>
   );

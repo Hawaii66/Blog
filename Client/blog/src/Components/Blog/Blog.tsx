@@ -8,7 +8,7 @@ import BlogEditorButtons from './BlogEditorButtons';
 import BlogSave from './BlogSave';
 import { UserContext } from '../../Contexts/UserContext';
 import { StaticContext } from '../../Contexts/StaticContext';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from '../../Utils/Hooks';
 
 export interface EditorSettings {
@@ -133,6 +133,7 @@ function Blog() {
     
     const { apiEndPoint,website } = useContext(StaticContext);
     const {accessToken,refreshToken} = useContext(UserContext);
+    const {user} = useContext(UserContext);
 
     useEffect(()=>{
         const getBlog = async () => {
@@ -173,7 +174,7 @@ function Blog() {
                     style={{
                         textAlign:"center"
                     }}>
-                    <a href={`${website}/?author=${blogPost.author}`}>{blogPost.author}</a>
+                    <Link to={`/?author=${blogPost.author}`}>{user?.name}</Link>
                     {": "}
                     {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
                 </p>

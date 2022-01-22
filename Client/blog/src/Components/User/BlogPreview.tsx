@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Card, Placeholder } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { BlogPreviewInterface } from '../../Interfaces/BlogInterface';
 
@@ -25,19 +26,19 @@ function BlogPreview({blogID}:Props) {
         setInfo(await result.json());
     }
 
-    const link = `${website}/?id=${info?.id}`;
+    const link = `/?id=${info?.id}`;
 
     if(info === null){
         return(
             <Card>
                 <Card.Body>
                     <Card.Title>
-                        <Placeholder as={Card.Title} animation="glow">
+                        <Placeholder animation="glow">
                             <Placeholder xs={6} />
                         </Placeholder>
                     </Card.Title>
                     <Card.Text>
-                        <Placeholder as={Card.Text} animation="glow">
+                        <Placeholder animation="glow">
                             <Placeholder xs={5} />{' '}
                             <Placeholder xs={4} />{' '}
                             <Placeholder xs={6} />{' '}
@@ -63,7 +64,7 @@ function BlogPreview({blogID}:Props) {
                     {info.text}
                 </Card.Text>
                 <Card.Footer style={{display:"flex",justifyContent:"center"}}>
-                    <Card.Link href={link}>Read More</Card.Link>
+                    <Card.Link as="div" ><Link to={link}>Read More</Link></Card.Link>
                 </Card.Footer>
             </Card.Body>
         </Card>
