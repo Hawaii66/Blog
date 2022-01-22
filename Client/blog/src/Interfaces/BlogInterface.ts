@@ -7,6 +7,13 @@ export interface BlogInterface {
     id:string
 }
 
+export interface BlogPreviewInterface {
+    title:string,
+    id:string,
+    text:string,
+    date:number
+}
+
 export interface BlogContentInterface {
     title:string,
     imgLeft:BlogImageInterface|null,
