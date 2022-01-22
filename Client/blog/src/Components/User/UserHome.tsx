@@ -8,6 +8,7 @@ function UserHome() {
 
     return (
         <div style={{marginLeft:"20%",marginRight:"20%"}}>
+            <h1>{user?.name}</h1>
             <Row className="g-4" xs={1} md={4}>
                 {user?.blogs.map((id,inx)=>{
                     return(
