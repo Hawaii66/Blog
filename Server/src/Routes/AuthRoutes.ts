@@ -1,6 +1,6 @@
 import {Express, Request, Response, NextFunction} from "express";
 import { users } from "../Database/DatabaseAPI";
-import { CreateUser, GetUser, GetUserEmail, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
+import { CreateUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
 import { TokenUser, User } from "../Interfaces/UserInterface";
 const bcrypt = require("bcrypt");
 
@@ -20,6 +20,11 @@ export const AuthRoutes = (app:Express) => {
                 name:req.body.name
             }
 
+            if(await GetUserEmail(user.email) !== null)
+            {
+                return res.status(400).send("User already exists");
+            }
+
             user = await CreateUser(user);
             return res.status(201).json(user);
         } catch {
@@ -28,7 +33,7 @@ export const AuthRoutes = (app:Express) => {
     });
 
     app.get("/users/test",AuthToken, (req,res)=>{
-        res.send(req.id);
+        res.status(200).send("Found user");
     });
 
     app.get("/users/get",AuthToken, async(req,res)=>{
@@ -59,7 +64,6 @@ export const AuthRoutes = (app:Express) => {
     });
 
     app.post("/users/login/microsoft",async(req,res)=>{
-        const hashedID = await GetHashedMicrosoftID(req.body.microsoftID);
         const user = await GetUserEmail(req.body.email);
         if(user === null)
         {
@@ -90,9 +94,11 @@ function CreateJWT(user:TokenUser):string {
     return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
 }
 
-
 export function AuthToken(req:Request,res:Response,next:NextFunction){
     const authHeader = req.headers["authorization"];
+    if(authHeader && authHeader.split(" ")[0] !== "Bearer"){
+        return res.status(400).send("Not a bearer token");
+    }
     const token = authHeader && authHeader.split(" ")[1];
 
     if(token === null || token === undefined){return res.sendStatus(401);}
@@ -108,7 +114,7 @@ export function AuthToken(req:Request,res:Response,next:NextFunction){
 }
 
 export function GenerateAccessToken(user:TokenUser) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{expiresIn:"15s"});
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET,{expiresIn:"15m"});
 }
 
 async function GetRandomUserID(){
