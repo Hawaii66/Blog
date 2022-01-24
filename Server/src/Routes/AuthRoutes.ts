@@ -6,14 +6,11 @@ const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
 
-//var refreshTokens:string[] = [];
-
 export const AuthRoutes = (app:Express) => {
     app.post("/users/create", async(req,res)=>{
         try{
             const hashedID = await GetHashedMicrosoftID(req.body.microsoftID);
-            //await bcrypt.hash(req.body.microsoftID, 10);
-            console.log(hashedID);
+
             var user:User = {
                 blogs:[],
                 email:req.body.email,
@@ -53,7 +50,6 @@ export const AuthRoutes = (app:Express) => {
             if(err){return res.sendStatus(403);}
 
             const tokenUser:TokenUser = {
-                /*id:user.id,*/
                 microsoftID:user.microsoftID
             }
 
@@ -63,7 +59,6 @@ export const AuthRoutes = (app:Express) => {
     });
 
     app.post("/users/login/microsoft",async(req,res)=>{
-        /*const user = await GetUser(req.body.id);*/
         const hashedID = await GetHashedMicrosoftID(req.body.microsoftID);
         const user = await GetUserEmail(req.body.email);
         if(user === null)
@@ -74,8 +69,7 @@ export const AuthRoutes = (app:Express) => {
         try{
             if(await bcrypt.compare(req.body.microsoftID, user.microsoftID)){
                 const tokenUser:TokenUser = {
-                    microsoftID:user.microsoftID/*,
-                    id:req.body.id*/
+                    microsoftID:user.microsoftID
                 }
                 const accessToken = GenerateAccessToken(tokenUser);
                 const refreshToken = CreateJWT(tokenUser);
