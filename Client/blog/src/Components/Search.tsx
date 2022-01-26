@@ -1,17 +1,34 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Button, Form, FormControl } from 'react-bootstrap';
 
 function Search() {
+    const searchRef = useRef<HTMLInputElement|null>(null);
+
+    const search = () => {
+        if(searchRef === null){return;}
+
+        console.log(searchRef?.current?.value);
+    }
+
     return(
-        <Form className="d-flex">
-            <FormControl
-            type="search"
-            placeholder="Sök: Användare / blog"
-            className="me-2"
-            aria-label="Search"
-            />
-            <Button variant="outline-success">Sök</Button>
-        </Form>
+        <div>
+            <Form 
+                onSubmit={(e)=>{
+                e.preventDefault();
+                search();
+                }} 
+                className="d-flex">
+                
+                <FormControl
+                type="search"
+                placeholder="Search"
+                className="me-2"
+                aria-label="Search"
+                ref={searchRef}
+                />
+                <Button onClick={()=>search()} variant="outline-success">Search</Button>
+            </Form>
+        </div>
     )
 }
 

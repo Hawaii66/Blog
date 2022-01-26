@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { StaticContext } from '../Contexts/StaticContext';
 import { UserContext } from '../Contexts/UserContext';
+import Search from './Search';
 
 function TopNavbar() {
   const {user} = useContext(UserContext);
