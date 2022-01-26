@@ -1,6 +1,6 @@
 import {Express, Request, Response, NextFunction} from "express";
 import { users } from "../Database/DatabaseAPI";
-import { CreateUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
+import { CreateUser, GetUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
 import { TokenUser, User } from "../Interfaces/UserInterface";
 const bcrypt = require("bcrypt");
 
@@ -30,6 +30,19 @@ export const AuthRoutes = (app:Express) => {
         } catch {
             return res.status(500).send("Error creating user")
         }
+    });
+
+    app.get("/users/blogs/:id", async(req,res)=>{
+        const id = req.params.id;
+        const user = await GetUser(id);
+        if(user === null){return res.status(400).send("No user found with Id: "+id);}
+
+        return res.status(200).json(
+            {
+                name:user.name,
+                blogs:user.blogs
+            }
+        );
     });
 
     app.get("/users/test",AuthToken, (req,res)=>{

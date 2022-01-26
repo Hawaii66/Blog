@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useQuery } from '../Utils/Hooks';
 import Blog from './Blog/Blog';
+import Home from './Home/Home';
 import UserHome from './User/UserHome';
 
 function RouterApp() {
@@ -22,9 +23,7 @@ function RouterApp() {
     return (
         <Routes>
           <Route path="/" element={
-            <>
-            
-            </>}/>
+            <Home/>}/>
           <Route 
             path="/view"
             element={<Blog/>}

@@ -9,6 +9,7 @@ import { useQuery } from './Utils/Hooks';
 import UserHome from './Components/User/UserHome';
 import RouterApp from './Components/RouterApp';
 import { Spinner } from 'react-bootstrap';
+import TopNavbar from './Components/TopNavbar';
 
 function App() {
   const [accessToken, setAccessToken] = useState("");
@@ -97,8 +98,11 @@ function App() {
   if(user === null && pathNeedLogin()){
     if(sessionStorage.getItem("msid") === null || sessionStorage.getItem("email") === null){
       return(
-        <div className="App" style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>
+        <div className="App">
+          <TopNavbar/>
+          <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+            <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>
+          </div>
         </div>
       )
     }else{
@@ -107,10 +111,13 @@ function App() {
         id:sessionStorage.getItem("msid")
       });
       return(
-        <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+        <div className="App">
+          <TopNavbar/>
+          <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </Spinner>
+          </div>
         </div>
       )
     }
@@ -119,8 +126,9 @@ function App() {
   return (
     <div className="App">
       <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
-          Hello World!
-          <Router><RouterApp/></Router>
+        Hello World!
+        <TopNavbar/>
+        <Router><RouterApp/></Router>
       </UserContext.Provider>
     </div>
   );
