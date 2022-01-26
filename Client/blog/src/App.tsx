@@ -19,6 +19,12 @@ function App() {
 
   const {apiEndPoint} = useContext(StaticContext);
 
+  const noLoginPaths = [
+    "author",
+    "view",
+    ""
+  ]
+
   const loginWrapper = async (err:boolean,data:{email:string|null,id:string|null}) => {
     if(data.email === null || data.id === null){err = true;}
     await login(err ? true : null, {
@@ -58,6 +64,9 @@ function App() {
       setAccessToken(tokens.accessToken);
       setRefreshToken(tokens.refreshToken);
 
+      sessionStorage.setItem("msid", sendData.microsoftID);
+      sessionStorage.setItem("email", sendData.email);
+
       const userResult = await fetch(`${apiEndPoint}/users/get`,{
         method:"GET",
         headers:{
@@ -75,7 +84,17 @@ function App() {
     return token;
   }
 
-  if(user === null){
+  const pathNeedLogin = () => {
+    var found = true;
+    noLoginPaths.map(i => {
+      if(i === window.location.pathname.split("/")[1]){
+        found = false;
+      }
+    });
+    return found;
+  }
+
+  if(user === null && pathNeedLogin()){
     if(sessionStorage.getItem("msid") === null || sessionStorage.getItem("email") === null){
       return(
         <div className="App" style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
@@ -101,12 +120,13 @@ function App() {
     <div className="App">
       <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
           Hello World!
-          {user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>}
           <Router><RouterApp/></Router>
       </UserContext.Provider>
     </div>
   );
 }
+
+//{user === null && <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>}
 
 async function CreateUser(data:any,apiEndPoint:string):Promise<User|null>{
   const sendData:any = {

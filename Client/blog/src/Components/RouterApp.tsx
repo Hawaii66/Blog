@@ -21,19 +21,19 @@ function RouterApp() {
 
     return (
         <Routes>
-            <Route path="/" element={
-              <>
-              
-              </>}/>
-            <Route 
-              path="/view"
-              element={<Blog/>}
-            />
-            <Route
-              path="/author" 
-              element={<UserHome/>}
-            />
-          </Routes>
+          <Route path="/" element={
+            <>
+            
+            </>}/>
+          <Route 
+            path="/view"
+            element={<Blog/>}
+          />
+          <Route
+            path="/author" 
+            element={<UserHome/>}
+          />
+        </Routes>
     )
 }
 
