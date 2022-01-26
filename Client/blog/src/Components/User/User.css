@@ -1,0 +1,18 @@
+.PreviewParent {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+@media screen and (max-width: 768px) {
+    .PreviewParent {
+        margin-left: 15%;
+        margin-right: 15%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .PreviewParent {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+}

@@ -3,13 +3,15 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { UserContext } from '../../Contexts/UserContext'
 import BlogPreview from './BlogPreview';
 
+import "./User.css";
+
 function UserHome() {
     const {user} = useContext(UserContext);
 
     return (
-        <div style={{marginLeft:"20%",marginRight:"20%"}}>
+        <div className='PreviewParent'>
             <h1>{user?.name}</h1>
-            <Row className="g-4" xs={1} md={4}>
+            <Row className="g-4" xs={1} sm={2} md={3}>
                 {user?.blogs.map((id,inx)=>{
                     return(
                         <Col key={inx}>

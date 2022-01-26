@@ -35,7 +35,7 @@ export const BlogRoutes = (app:Express) => {
             text = blog.content[0].text;
         }
 
-        text = text.substring(0, 20 * 7);
+        text = text.substring(0, 40 * 7);
         if(text[text.length - 1] === "," || text[text.length - 1] === " "){
             text = text.slice(0, -1);
         }
