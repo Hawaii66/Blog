@@ -11,7 +11,8 @@ export interface BlogPreviewInterface {
     title:string,
     id:string,
     text:string,
-    date:number
+    date:number,
+    author:string
 }
 
 export interface BlogContentInterface {

@@ -5,10 +5,11 @@ import { StaticContext } from '../../Contexts/StaticContext';
 import { BlogPreviewInterface } from '../../Interfaces/BlogInterface';
 
 export interface Props{
-    blogID:string
+    blogID:string,
+    renderAuthor:boolean
 }
 
-function BlogPreview({blogID}:Props) {
+function BlogPreview({blogID,renderAuthor}:Props) {
     const [info,setInfo] = useState<BlogPreviewInterface|null>(null);
 
     const {website,apiEndPoint} = useContext(StaticContext);
@@ -58,7 +59,7 @@ function BlogPreview({blogID}:Props) {
     return (
         <Card>
             <Card.Body>
-                <Card.Title>{info.title}</Card.Title>
+                <Card.Title>{renderAuthor && `${info.author}: `}{info.title}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">{new Date(info.date).toLocaleString("sw-SW")}</Card.Subtitle>
                 <Card.Text>
                     {info.text}

@@ -2,9 +2,10 @@ import {Express, Request, Response} from "express";
 import { BlogInterface, BlogPreviewInterface } from "../Interfaces/BlogInterface";
 import { CreateBlog, GetAllBlogs, GetBlog } from "../Database/BlogDB";
 import { AuthToken } from "./AuthRoutes";
-import { GetUserMicrosoftID, UserAddBlog } from "../Database/AccountDB";
+import { GetUser, GetUserMicrosoftID, UserAddBlog } from "../Database/AccountDB";
 import { blogs } from "../Database/DatabaseAPI";
 import { SearchBlogNames } from "../Utils/TextSearch";
+import { SortBlogs } from "../Utils/Blogs";
 
 export const BlogRoutes = (app:Express) => {
     app.post("/blog/save",AuthToken,async(req,res)=>{
@@ -46,10 +47,39 @@ export const BlogRoutes = (app:Express) => {
         res.status(200).json(send);
     });
 
+    app.get("/blog/last/:start/:end",async(req,res)=>{
+        const start = req.params.start;
+        const end = req.params.end;
+
+        var blogs = await GetAllBlogs();
+        if(blogs === null){return res.status(500).send("No blogs found")}
+        blogs = SortBlogs(blogs);
+        blogs.reverse();
+        blogs = blogs.splice(parseInt(start),parseInt(end));
+
+        var sendData:BlogPreviewInterface[] = [];
+        for(var i = 0; i < blogs.length; i ++){
+            const blog = blogs[i];
+            
+            sendData.push({
+                date:blog.publishDate,
+                id:blog.id,
+                title:blog.title,
+                text:"",
+                author:blog.author
+            });
+        }
+
+        res.send(sendData);
+    });
+
     app.get("/blog/preview/:id",async(req,res)=>{
         const blog = await GetBlog(req.params.id);
         if(blog === null){return res.status(400).send("No blog found");}
         
+        const author = await GetUser(blog.author);
+        if(author === null){return res.status(500).send("No author found for the blog");}
+
         var text = "";
         if(blog.content.length !== 0){
             text = blog.content[0].text;
@@ -64,7 +94,8 @@ export const BlogRoutes = (app:Express) => {
             id:blog.id,
             date:blog.publishDate,
             text:text,
-            title:blog.title
+            title:blog.title,
+            author:author.name
         } 
         res.status(200).json(data);
     });

@@ -1,0 +1,9 @@
+.size-40 {
+    width: 40%;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

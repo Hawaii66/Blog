@@ -24,13 +24,3 @@ li::before {
     background-image: url("./Blog.svg");
     background-size: cover;
 }
-
-.size-40 {
-    width: 40%;
-}
-
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}

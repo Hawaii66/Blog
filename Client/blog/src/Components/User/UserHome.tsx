@@ -40,7 +40,7 @@ function UserHome() {
                 {user?.blogs.map((id,inx)=>{
                     return(
                         <Col key={inx}>
-                            <BlogPreview blogID={id}/>
+                            <BlogPreview renderAuthor={false} blogID={id}/>
                         </Col>
                     )
                 })}

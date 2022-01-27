@@ -11,6 +11,8 @@ import RouterApp from './Components/RouterApp';
 import { Spinner } from 'react-bootstrap';
 import TopNavbar from './Components/TopNavbar';
 
+import "./App.css";
+
 function App() {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
