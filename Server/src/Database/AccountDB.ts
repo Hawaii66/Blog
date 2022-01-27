@@ -5,6 +5,7 @@ import {db, tokens, users} from "./DatabaseAPI";
 //type GetUserType = (accountID: string)=> Promise<User|null>
 //type AddUserType = (user:User) =>Promise<User|null>
 
+type GetAll = () => Promise<User[]|null>;
 type UserIDType = (id:string) => Promise<boolean>;
 type CreateUserType = (user:User) => Promise<User>;
 type GetUserType = (id:string) => Promise<User|null>;
@@ -14,6 +15,11 @@ type SetRefreshTokenType = (token:string) => Promise<void>;
 type HasRefershTokenType = (token:string) => Promise<boolean>;
 type RemoveRefreshTokenType = (token:string) => Promise<void>;
 type AddBlogType = (userID:string,blogID:string) => Promise<void>;
+
+export const GetAllUsers:GetAll = async ()=>{
+    var all:User[]|null = await users.find();
+    return all;
+}
 
 export const CreateUser:CreateUserType = async (user:User) => {
     var newUser:User = await users.insert(user);

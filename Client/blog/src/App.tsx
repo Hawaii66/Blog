@@ -23,6 +23,7 @@ function App() {
   const noLoginPaths = [
     "author",
     "view",
+    "search",
     ""
   ]
 

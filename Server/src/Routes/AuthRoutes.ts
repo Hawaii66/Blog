@@ -1,7 +1,8 @@
 import {Express, Request, Response, NextFunction} from "express";
 import { users } from "../Database/DatabaseAPI";
-import { CreateUser, GetUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
+import { CreateUser, GetAllUsers, GetUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
 import { TokenUser, User } from "../Interfaces/UserInterface";
+import { SearchUserNames } from "../Utils/TextSearch";
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
@@ -30,6 +31,38 @@ export const AuthRoutes = (app:Express) => {
         } catch {
             return res.status(500).send("Error creating user")
         }
+    });
+
+    app.get("/users/search/:query",async(req,res)=>{
+        const query = req.params.query;
+        if(query === null){return res.status(400).send("No query string found");}
+
+        const allUsers = await GetAllUsers();
+        if(allUsers === null){return res.status(500).send("Internal server error, no blogs found");}
+
+        const users = SearchUserNames(allUsers, query);
+
+        var send:{name:string,id:string}[] = []
+        for(var i = 0; i < users.length; i ++){
+            send.push({
+                name:users[i].name,
+                id:users[i].id
+            });
+        }
+
+        res.status(200).json(send);
+    });
+
+    app.get("/users/get/name/:id",async(req,res)=>{
+        const id = req.params.id;
+        const user = await GetUser(id);
+        if(user === null){return res.status(400).send("No user found with Id: "+id);}
+        
+        return res.status(200).json(
+            {
+                name:user.name
+            }
+        );
     });
 
     app.get("/users/blogs/:id", async(req,res)=>{

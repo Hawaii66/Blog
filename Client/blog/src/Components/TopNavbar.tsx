@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Container, Nav, Navbar, NavDropdown, Form, FormControl, Button } from 'react-bootstrap';
 import { StaticContext } from '../Contexts/StaticContext';
 import { UserContext } from '../Contexts/UserContext';
-import Search from './Search';
+import Search from './Search/Search';
 
 function TopNavbar() {
   const {user} = useContext(UserContext);
@@ -12,7 +12,7 @@ function TopNavbar() {
   const loginPath = `${website}/login`;
 
   return (
-      <Navbar expand="lg">
+      <Navbar style={{marginBottom:"2rem",borderBottom:"1px rgba(1,1,1,0.25) solid"}} expand="lg">
         <Container>
           <Navbar.Brand href="/">HawaiiDev Blog</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

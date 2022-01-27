@@ -130,10 +130,10 @@ function Blog() {
             },
         ]
     });
+    const [user, setUser] = useState("");
     
     const { apiEndPoint,website } = useContext(StaticContext);
     const {accessToken,refreshToken} = useContext(UserContext);
-    const {user} = useContext(UserContext);
 
     useEffect(()=>{
         const getBlog = async () => {
@@ -141,7 +141,13 @@ function Blog() {
                 const id = query.get("id");
                 if(id === null){return;}
 
-                setBlogPost(await GetBlogWithID(id, apiEndPoint));
+                var blog = await GetBlogWithID(id, apiEndPoint);
+                var user = await fetch(`${apiEndPoint}/users/get/name/${blog.author}`,{
+                    method:"GET"
+                });
+
+                setUser((await user.json()).name);
+                setBlogPost(blog);
             }
         }
         getBlog()
@@ -174,7 +180,7 @@ function Blog() {
                     style={{
                         textAlign:"center"
                     }}>
-                    <Link to={`/?author=${blogPost.author}`}>{user?.name}</Link>
+                    <Link to={`/?author=${blogPost.author}`}>{user}</Link>
                     {": "}
                     {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
                 </p>

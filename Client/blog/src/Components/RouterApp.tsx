@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { useQuery } from '../Utils/Hooks';
 import Blog from './Blog/Blog';
 import Home from './Home/Home';
+import SearchResults from './Search/SearchResults';
 import UserHome from './User/UserHome';
 
 function RouterApp() {
@@ -31,6 +32,10 @@ function RouterApp() {
           <Route
             path="/author" 
             element={<UserHome/>}
+          />
+          <Route
+            path="/search" 
+            element={<SearchResults/>}
           />
         </Routes>
     )

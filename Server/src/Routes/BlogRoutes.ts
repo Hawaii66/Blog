@@ -1,9 +1,10 @@
 import {Express, Request, Response} from "express";
 import { BlogInterface, BlogPreviewInterface } from "../Interfaces/BlogInterface";
-import { CreateBlog, GetBlog } from "../Database/BlogDB";
+import { CreateBlog, GetAllBlogs, GetBlog } from "../Database/BlogDB";
 import { AuthToken } from "./AuthRoutes";
 import { GetUserMicrosoftID, UserAddBlog } from "../Database/AccountDB";
 import { blogs } from "../Database/DatabaseAPI";
+import { SearchBlogNames } from "../Utils/TextSearch";
 
 export const BlogRoutes = (app:Express) => {
     app.post("/blog/save",AuthToken,async(req,res)=>{
@@ -24,6 +25,25 @@ export const BlogRoutes = (app:Express) => {
         
         const newBlog = await blogs.findOneAndUpdate({id:blog.id},{$set:blog});
         res.status(200).json(newBlog);
+    });
+
+    app.get("/blog/search/:query", async(req,res)=>{
+        var query = req.params.query;
+        if(query === null){return res.status(400).send("No query string found");}
+
+        var allBlogs = await GetAllBlogs();
+        if(allBlogs === null){return res.status(500).send("Internal server error: No blogs found");}
+
+        var blogs = SearchBlogNames(allBlogs, query);
+        var send:{name:string,id:string}[] = []
+        for(var i = 0; i < blogs.length; i ++){
+            send.push({
+                name:blogs[i].title,
+                id:blogs[i].id
+            });
+        }
+
+        res.status(200).json(send);
     });
 
     app.get("/blog/preview/:id",async(req,res)=>{

@@ -1,9 +1,15 @@
 import { BlogInterface } from "../Interfaces/BlogInterface";
 import { blogs } from "./DatabaseAPI";
 
+type GetAll = () => Promise<BlogInterface[]|null>
 type GetBlogType = (id:string) => Promise<BlogInterface|null>
 type BlogExistsType = (id:string) => Promise<boolean>
 type CreateBlogType = (blog:BlogInterface) => Promise<BlogInterface>
+
+export const GetAllBlogs:GetAll = async ()=>{
+    const all:BlogInterface[]|null = await blogs?.find();
+    return all;
+}
 
 export const GetBlog:GetBlogType = async (id:string) => {
     const blog:BlogInterface|null = await blogs.findOne({id:id});

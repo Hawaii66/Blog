@@ -1,0 +1,36 @@
+li {
+    list-style: none;
+}
+
+li::before {
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    margin-left: 0px;
+    float: left;
+    margin: auto;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    margin-right: 0.5rem;
+}
+
+.User::before {
+    background-image: url("./User.svg");
+    background-size: cover;
+}
+
+.Blog::before {
+    background-image: url("./Blog.svg");
+    background-size: cover;
+}
+
+.size-40 {
+    width: 40%;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

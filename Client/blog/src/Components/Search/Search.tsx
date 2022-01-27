@@ -1,13 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import { Button, Form, FormControl } from 'react-bootstrap';
+import { StaticContext } from '../../Contexts/StaticContext';
 
 function Search() {
     const searchRef = useRef<HTMLInputElement|null>(null);
 
+    const {website} = useContext(StaticContext);
+
     const search = () => {
         if(searchRef === null){return;}
+        if(searchRef.current === null){return;}
 
-        console.log(searchRef?.current?.value);
+        window.location.assign(`${website}/search?search=${searchRef.current.value}`);
     }
 
     return(
