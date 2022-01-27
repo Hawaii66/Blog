@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Badge, ListGroup } from 'react-bootstrap';
+import { Alert, Badge, ListGroup, Spinner } from 'react-bootstrap';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { BlogInterface } from '../../Interfaces/BlogInterface';
 import { User } from '../../Interfaces/UserInterface';
@@ -14,7 +14,7 @@ interface SearchResult {
 }
 
 function SearchResults() {
-    const [results,setResults] = useState<SearchResult[]>([]);
+    const [results,setResults] = useState<SearchResult[]|null>(null);
 
     const {website,apiEndPoint} = useContext(StaticContext);
     
@@ -74,9 +74,18 @@ function SearchResults() {
         search();
     },[])
   
+    if(results === null){
+        return(
+            <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                <Spinner animation="border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>
+        )
+    }
+
     return (
         <div className="center">
-            
             {results.length > 0 ?
             <ListGroup className="size-40" defaultActiveKey="#link1">
                 {results.map(res=>{
@@ -101,8 +110,8 @@ function SearchResults() {
                 })}
             </ListGroup>
             :
-            <Alert variant={"warning"}>
-                No User or Blog found with that name
+            <Alert style={{minWidth:"30%",textAlign:"center"}} variant={"warning"}>
+                No User or Blog found with "{query.get("search")}"
             </Alert>
             }
         </div>    

@@ -15,6 +15,7 @@ function App() {
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
   const [user, setUser] = useState<User|null>(null);
+  const [logginReqSent,setLoginReqSent] = useState(false);
 
   const microsoftID = process.env.REACT_APP_MICROSOFT_LOGIN || "";
 
@@ -48,10 +49,14 @@ function App() {
 
       if(user !== null){return;}
       
+      if(logginReqSent){return;}
+
       var sendData = {
         microsoftID:data.id,
         email:data.account.userName
       }
+
+      setLoginReqSent(true);
 
       var loginResult = await GetUserTokens(sendData, apiEndPoint);
 
@@ -96,32 +101,33 @@ function App() {
     return found;
   }
 
+  if(user === null && sessionStorage.getItem("msid") !== null && sessionStorage.getItem("email") !== null)
+  {
+    loginWrapper(false,{
+      email:sessionStorage.getItem("email"),
+      id:sessionStorage.getItem("msid")
+    });
+    return(
+      <div className="App">
+        <TopNavbar/>
+        <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      </div>
+    )
+  }
+
   if(user === null && pathNeedLogin()){
-    if(sessionStorage.getItem("msid") === null || sessionStorage.getItem("email") === null){
-      return(
-        <div className="App">
-          <TopNavbar/>
-          <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
-            <MicrosoftLogin clientId={microsoftID} authCallback={login} withUserData/>
-          </div>
+    return(
+      <div className="App">
+        <TopNavbar/>
+        <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <MicrosoftLogin clientId={microsoftID} authCallback={(e,d)=>{login(e,d);window.history.back()}} withUserData/>
         </div>
-      )
-    }else{
-      loginWrapper(false,{
-        email:sessionStorage.getItem("email"),
-        id:sessionStorage.getItem("msid")
-      });
-      return(
-        <div className="App">
-          <TopNavbar/>
-          <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          </div>
-        </div>
-      )
-    }
+      </div>
+    )
   }
 
   return (

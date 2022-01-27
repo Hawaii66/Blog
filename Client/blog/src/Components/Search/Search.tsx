@@ -25,12 +25,12 @@ function Search() {
                 
                 <FormControl
                 type="search"
-                placeholder="Search"
+                placeholder="Sök"
                 className="me-2"
                 aria-label="Search"
                 ref={searchRef}
                 />
-                <Button onClick={()=>search()} variant="outline-success">Search</Button>
+                <Button onClick={()=>search()} variant="outline-success">Sök</Button>
             </Form>
         </div>
     )

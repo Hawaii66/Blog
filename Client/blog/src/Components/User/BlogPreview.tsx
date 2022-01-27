@@ -64,7 +64,7 @@ function BlogPreview({blogID}:Props) {
                     {info.text}
                 </Card.Text>
                 <Card.Footer style={{display:"flex",justifyContent:"center"}}>
-                    <Card.Link as="div" ><Link to={link}>Read More</Link></Card.Link>
+                    <Card.Link as="div" ><Link to={link}>Läs Mer</Link></Card.Link>
                 </Card.Footer>
             </Card.Body>
         </Card>

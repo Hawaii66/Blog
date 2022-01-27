@@ -30,11 +30,11 @@ function TopNavbar() {
 
             {user === null ?
               <Navbar.Text>
-                <a href={loginPath}>Login</a>
+                <a href={loginPath}>Logga in</a>
               </Navbar.Text>
               :   
               <Navbar.Text>
-                Signed in as: <a href={userPath}>{user?.name}</a>
+                Inloggad som: <a href={userPath}>{user?.name}</a>
               </Navbar.Text> 
             }
           </Navbar.Collapse>
