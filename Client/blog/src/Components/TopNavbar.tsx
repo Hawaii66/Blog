@@ -6,10 +6,20 @@ import Search from './Search/Search';
 
 function TopNavbar() {
   const {user} = useContext(UserContext);
-  const {website} = useContext(StaticContext);
+  const {website, apiEndPoint} = useContext(StaticContext);
 
   const userPath = `${website}/?author=${user?.id}`;
   const loginPath = `${website}/login`;
+
+  const RandomBlog = async() => {
+    const res = await fetch(`${apiEndPoint}/blog/random`,{
+      method:"GET",
+    });
+
+    if(res.status !== 200){return;}
+
+    window.location.assign(`${website}/?id=${(await res.json())}`);
+  }
 
   return (
       <Navbar style={{marginBottom:"2rem",borderBottom:"1px rgba(1,1,1,0.25) solid"}} expand="lg">
@@ -19,7 +29,7 @@ function TopNavbar() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/">Hem</Nav.Link>
-              <Nav.Link href="/">Random blog</Nav.Link>
+              <Nav.Link onClick={()=>RandomBlog()}>Random blog</Nav.Link>
               <NavDropdown title="Top användare" id="basic-nav-dropdown">
                 <NavDropdown.Item href={`${website}/?author=1642790786280:272676:user`}>Sebastian Ahlman</NavDropdown.Item>
               </NavDropdown>

@@ -73,6 +73,15 @@ export const BlogRoutes = (app:Express) => {
         res.send(sendData);
     });
 
+    app.get("/blog/random",async(req,res)=>{
+        const blogs = await GetAllBlogs();
+        if(blogs === null){return res.status(500).send("No blogs found");}
+
+        var randomIndex = Math.floor(Math.random()*blogs.length);
+
+        res.status(200).json(blogs[randomIndex].id);
+    });
+
     app.get("/blog/preview/:id",async(req,res)=>{
         const blog = await GetBlog(req.params.id);
         if(blog === null){return res.status(400).send("No blog found");}
