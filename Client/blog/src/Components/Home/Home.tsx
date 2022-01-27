@@ -28,9 +28,15 @@ function Home() {
 
   if(previews === null){
     return(
-      <div>
-        Empty
-      </div>
+      <Row style={{width:"60%"}} className="g-4" xs={1} sm={2} md={2}>
+          {(new Array(10)).map((id,inx)=>{
+              return(
+                  <Col key={inx}>
+                      <BlogPreview renderAuthor blogID={id}/>
+                  </Col>
+              )
+          })}
+      </Row>
     )
   }
 
