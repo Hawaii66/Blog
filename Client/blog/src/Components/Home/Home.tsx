@@ -32,7 +32,7 @@ function Home() {
           {(new Array(10)).map((id,inx)=>{
               return(
                   <Col key={inx}>
-                      <BlogPreview renderAuthor blogID={id}/>
+                      <BlogPreview edit={false} renderAuthor blogID={id}/>
                   </Col>
               )
           })}
@@ -46,7 +46,7 @@ function Home() {
                 {previews.map((blog,inx)=>{
                     return(
                         <Col key={inx}>
-                            <BlogPreview renderAuthor blogID={blog.id}/>
+                            <BlogPreview edit={false} renderAuthor blogID={blog.id}/>
                         </Col>
                     )
                 })}

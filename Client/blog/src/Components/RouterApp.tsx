@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useQuery } from '../Utils/Hooks';
 import Blog from './Blog/Blog';
+import Edit from './Edit';
 import Home from './Home/Home';
 import SearchResults from './Search/SearchResults';
 import UserHome from './User/UserHome';
@@ -27,7 +28,7 @@ function RouterApp() {
             <Home/>}/>
           <Route 
             path="/view"
-            element={<Blog/>}
+            element={<Blog edit={false}/>}
           />
           <Route
             path="/author" 
@@ -36,6 +37,10 @@ function RouterApp() {
           <Route
             path="/search" 
             element={<SearchResults/>}
+          />
+          <Route
+            path="/edit" 
+            element={<Edit/>}
           />
         </Routes>
     )

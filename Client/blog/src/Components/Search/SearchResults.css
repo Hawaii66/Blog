@@ -16,11 +16,11 @@ li::before {
 }
 
 .User::before {
-    background-image: url("./User.svg");
+    background-image: url("../../Svg/User.svg");
     background-size: cover;
 }
 
 .Blog::before {
-    background-image: url("./Blog.svg");
+    background-image: url("../../Svg/Blog.svg");
     background-size: cover;
 }

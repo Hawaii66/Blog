@@ -8,7 +8,6 @@ type SearchBlogNames = (users:BlogInterface[],query:string) => BlogInterface[];
 export const SearchString:SearchStringType = (text,query) => {
     text = text.toLocaleLowerCase();
     query = query.toLocaleLowerCase();
-    console.log(text,query);
     return text.includes(query);
 }
 

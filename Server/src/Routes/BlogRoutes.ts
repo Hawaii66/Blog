@@ -19,10 +19,10 @@ export const BlogRoutes = (app:Express) => {
             publishDate:dataBlog.publishDate,
             title:dataBlog.title
         }
-
-        const user = await GetUserMicrosoftID(req.body.id)
+        /*const user = await GetUserMicrosoftID(req.body.id)
         if(user === null){return;}
-        await UserAddBlog(user.id, blog.id);
+        console.log("Uesr not nukk");
+        await UserAddBlog(user.id, blog.id);*/
         
         const newBlog = await blogs.findOneAndUpdate({id:blog.id},{$set:blog});
         res.status(200).json(newBlog);
@@ -115,8 +115,6 @@ export const BlogRoutes = (app:Express) => {
     });
 
     app.post("/blog/create",AuthToken,async(req,res)=>{
-        console.log("New blog Post");
-
         const user = await GetUserMicrosoftID(req.id);
         if(user === null){return res.status(400).send("No user found");}
 
@@ -135,7 +133,6 @@ export const BlogRoutes = (app:Express) => {
         }
 
         const newBlog = await CreateBlog(blog);
-        console.log(newBlog);
         res.status(201).json(newBlog);
     });
 }

@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { BlogPreviewInterface } from '../../Interfaces/BlogInterface';
 
+import "./BlogPreview.css";
+
 export interface Props{
     blogID:string,
-    renderAuthor:boolean
+    renderAuthor:boolean,
+    edit:boolean
 }
 
-function BlogPreview({blogID,renderAuthor}:Props) {
+function BlogPreview({blogID,renderAuthor,edit}:Props) {
     const [info,setInfo] = useState<BlogPreviewInterface|null>(null);
 
     const {website,apiEndPoint} = useContext(StaticContext);
@@ -28,6 +31,8 @@ function BlogPreview({blogID,renderAuthor}:Props) {
     }
 
     const link = `/?id=${info?.id}`;
+
+    const editLink = `/edit/?id=${info?.id}`;
 
     if(info === null){
         return(
@@ -59,7 +64,13 @@ function BlogPreview({blogID,renderAuthor}:Props) {
     return (
         <Card>
             <Card.Body>
-                <Card.Title>{renderAuthor && `${info.author}: `}{info.title}</Card.Title>
+                <Card.Title>
+                    {renderAuthor && `${info.author}: `}
+                    {info.title}
+                    <Card.Link onClick={()=>window.location.assign(editLink)} className={edit ? "Edit" : ""}>
+
+                    </Card.Link>
+                </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">{new Date(info.date).toLocaleString("sw-SW")}</Card.Subtitle>
                 <Card.Text>
                     {info.text}

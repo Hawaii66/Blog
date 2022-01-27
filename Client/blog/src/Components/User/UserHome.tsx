@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Card, Col, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext'
@@ -9,9 +9,10 @@ import BlogPreview from './BlogPreview';
 import "./User.css";
 
 function UserHome() {
-    const [user, setUser] = useState<{name:string,blogs:string[]}|null>(null);
+    const [author, setUser] = useState<{name:string,blogs:string[]}|null>(null);
 
     const {apiEndPoint} = useContext(StaticContext);
+    const {user} = useContext(UserContext);
     const location = useLocation();
     const query = useQuery();
 
@@ -33,14 +34,33 @@ function UserHome() {
         GetUser();
     },[]);
 
+    if(user?.id === query.get("author")){
+        return (
+            <div className='PreviewParent'>
+                <h1>{author?.name}</h1>
+                <Row className="g-4" xs={1} sm={2} md={3}>
+                    {author?.blogs.map((id,inx)=>{
+                        return(
+                            <Col key={inx}>
+                                <BlogPreview edit renderAuthor={false} blogID={id}/>
+                            </Col>
+                        )
+                    })}
+                    <Col>
+                        <Button variant="primary">Skapa ny blog</Button>
+                    </Col>
+                </Row>
+            </div>
+        )
+    }
     return (
         <div className='PreviewParent'>
-            <h1>{user?.name}</h1>
+            <h1>{author?.name}</h1>
             <Row className="g-4" xs={1} sm={2} md={3}>
-                {user?.blogs.map((id,inx)=>{
+                {author?.blogs.map((id,inx)=>{
                     return(
                         <Col key={inx}>
-                            <BlogPreview renderAuthor={false} blogID={id}/>
+                            <BlogPreview edit={false} renderAuthor={false} blogID={id}/>
                         </Col>
                     )
                 })}

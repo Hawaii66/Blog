@@ -37,10 +37,10 @@ function App() {
       account:{
         userName:data.email
       }
-    });
+    },false);
   }
 
-  const login = async (err:any, data:any) => {
+  const login = async (err:any, data:any, back:boolean) => {
       if(err !== null){
         return;
       }
@@ -85,6 +85,10 @@ function App() {
       if(userResult.status === 200){
         setUser(await userResult.json());
       }
+
+      if(back){
+        window.history.back()
+      }
     }
 
   const updateAccessToken = async() => {
@@ -126,7 +130,7 @@ function App() {
       <div className="App">
         <TopNavbar/>
         <div style={{height:"100vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <MicrosoftLogin clientId={microsoftID} authCallback={(e,d)=>{login(e,d);window.history.back()}} withUserData/>
+          <MicrosoftLogin clientId={microsoftID} authCallback={(e,d)=>{login(e,d,true);}} withUserData/>
         </div>
       </div>
     )

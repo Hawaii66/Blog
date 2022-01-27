@@ -27,6 +27,10 @@ export const BlogContext = createContext<BlogContextInterface>(
     }
 );
 
+export interface Props{
+    edit:boolean
+}
+
 /*
 {
     title:"First blog post",
@@ -76,9 +80,9 @@ export const BlogContext = createContext<BlogContextInterface>(
 }
 */
 
-function Blog() {
+function Blog({edit}:Props) {
     const [editorSettings, setEditorSettings] = useState<EditorSettings>({
-        isEditor:false
+        isEditor:edit
     });
     const [showSaveWindow, setShowSaveWindow] = useState(false);
     
@@ -211,7 +215,6 @@ export const CloudSave:CloudSaveType = async(blogPost,apiEndPoint,accessToken,up
         blog:blogPost,
         id:blogPost.id
     }
-
     var saveResult = await fetch(`${apiEndPoint}/blog/save`,{
         method:"POST",
         body: JSON.stringify(data),
@@ -234,8 +237,6 @@ export const CloudSave:CloudSaveType = async(blogPost,apiEndPoint,accessToken,up
     }
 
     const newBlogPost = await saveResult.json();
-
-    console.log(newBlogPost);
     return newBlogPost;
 }
 

@@ -1,0 +1,13 @@
+.Edit::after {
+    background-image: url("../../Svg/Edit.svg");
+    background-size: cover;
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    float: right;
+    margin: auto;
+    margin-right: 0px;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+}

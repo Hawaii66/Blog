@@ -75,10 +75,8 @@ function BlogTextModal({setShow, index}:Props) {
         }
 
         if(info === null){return;}
-
-        setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));
-
         setShow(false);
+        setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));;
     }
 
     useEffect(()=>{
