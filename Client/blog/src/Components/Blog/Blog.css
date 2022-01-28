@@ -26,3 +26,33 @@
     width: 60% !important;
     max-width: 60% !important;
 }
+
+.Trash::after {
+    background-image: url("../../Svg/Trash.svg");
+    background-size: cover;
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    float: right;
+    margin: auto;
+    margin-right: 0px;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    padding: 0px;
+}
+
+.Create::after {
+    background-image: url("../../Svg/Add.svg");
+    background-size: cover;
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    float: right;
+    margin: auto;
+    margin-right: 0px;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    padding: 0px;
+}

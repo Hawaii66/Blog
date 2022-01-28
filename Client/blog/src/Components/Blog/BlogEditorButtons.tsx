@@ -28,14 +28,14 @@ function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
             imgLeft:{
                 alt:"Alternativ text",
                 link:"https://unsplash.it/500/500",
-                sizeX:"100px",
-                sizeY:"100px"
+                sizeX:"30%",
+                sizeY:"5"
             },
             imgRight:{
                 alt:"Alternativ text",
                 link:"https://unsplash.it/500/500",
-                sizeX:"100px",
-                sizeY:"100px"
+                sizeX:"40%",
+                sizeY:"2"
             }
         });
         setBlogPost(post);
@@ -55,8 +55,8 @@ function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
         <div className="center">
             <ButtonGroup className={`${lastToggle ? "Middle" : "End"}`}>
                 {lastToggle && <Button onClick={save} variant="primary">Spara</Button>}
-                {!lastToggle && <Button onClick={remove} variant="danger">Ta bort</Button>}
-                <Button onClick={createAbove} variant="secondary">Skapa sektion över</Button>
+                {!lastToggle && <Button className="Trash" onClick={remove} variant="danger"></Button>}
+                <Button className="Create" onClick={createAbove} variant="secondary"></Button>
             </ButtonGroup> 
         </div>
     )
