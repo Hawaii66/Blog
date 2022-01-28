@@ -188,6 +188,7 @@ function Blog({edit}:Props) {
                     {": "}
                     {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
                 </p>
+
                 {blogPost.content.map((item,index)=>{
                     return(
                         <BlogContent setEditorSettings={setEditorSettings} editorSettings={editorSettings} key={Math.random()*100} content={item} index={index} />
