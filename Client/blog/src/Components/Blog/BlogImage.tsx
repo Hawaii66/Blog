@@ -63,6 +63,7 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
         if(dir === "left"){
             pixelSizeX = initSizeX + e.clientX - initPosX;
             percentX = CalcPercentX(pixelSizeX);
+            
             if(pixel){
                 setImageX(`${pixelSizeX}px`)
             }else{
@@ -80,10 +81,8 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
             }
         }
 
-        const h = window.screen.height;
         const pixelSizeY = (initSizeY + e.clientY - initPosY);
-        const percent = CalcPercentY(pixelSizeY);
-        console.log("relation",pixelSizeY, pixelSizeY / pixelSizeX);
+        
         setImageY(`${pixelSizeY/pixelSizeX}`); //pixelSizeY
 
         return {x:`${percentX}%`,y:`${pixelSizeY/pixelSizeX}`}
@@ -91,9 +90,6 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
 
     const CalcPercentX = (pixelSize:number)=>{
         return pixelSize / window.innerWidth * 100;
-    }
-    const CalcPercentY = (pixelSize:number)=>{
-        return pixelSize / window.screen.height * 100;
     }
 
     const updateShowSettings = (b:boolean) => {
@@ -144,13 +140,11 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
         if(sizeX.charAt(sizeX.length - 1) === "%"){
             var x = sizeX.slice(0, sizeX.length - 2);
             
-            //val = window.screen.width * (parseFloat(x) / 100) * parseFloat(sizeY)
             val = window.innerWidth * parseFloat(x) / 100;
             val = val * parseFloat(sizeY);
-
-            //console.log(x,val,parseFloat(x)/100,window.screen.width,sizeY);
-        }else{
-            console.log(parseFloat(sizeY), parseFloat(sizeX.slice(0,sizeX.length - 2)));
+        }
+        else
+        {
             val = parseFloat(sizeY)*parseFloat(sizeX.slice(0,sizeX.length - 2))
         }
         return `${val}px`
@@ -163,6 +157,7 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
                 onDragStart={initial}
                 onDrag={(e)=>resize(e,true)}
                 onDragEnd={(e)=>{
+                    if(!editorSettings.isEditor){return;}
                     var cords:{x:string,y:string} = resize(e,false);
                     setTimeout(()=>{
                         save(cords.x,cords.y);
