@@ -48,37 +48,49 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
         }
     }
 
-    const resize = (e:any) => {
-        if(!editorSettings.isEditor){return;}
+    const resize = (e:any,pixel:boolean):{x:string,y:string} => {
+        if(!editorSettings.isEditor){return {x:"0",y:"0"};}
 
         let resizable = resizeRef.current;
-        if(resizable === null || initSizeX === undefined || initSizeY === undefined){return;}
+        if(resizable === null || initSizeX === undefined || initSizeY === undefined){return {x:"0",y:"0"};}
         
         if(e.clientX === 0 || e.clientY === 0){
-            return;
+            return {x:"0",y:"0"};
         }
 
+        var pixelSizeX = 0;
+        var percentX:number;
         if(dir === "left"){
-            const pixelSize = initSizeX + e.clientX - initPosX;
-            const percent = CalcPercentX(pixelSize);
-
-            setImageX(`${percent}%`);
+            pixelSizeX = initSizeX + e.clientX - initPosX;
+            percentX = CalcPercentX(pixelSizeX);
+            if(pixel){
+                setImageX(`${pixelSizeX}px`)
+            }else{
+                setImageX(`${percentX}%`);
+            }
         }
         else{
-            const pixelSize = initSizeX + (e.clientX - initPosX)*-1;
-            const percent = CalcPercentX(pixelSize);
+            pixelSizeX = initSizeX + (e.clientX - initPosX)*-1;
+            percentX = CalcPercentX(pixelSizeX);
 
-            setImageX(`${percent}%`);
+            if(pixel){
+                setImageX(`${pixelSizeX}px`);
+            }else{
+                setImageX(`${percentX}%`);
+            }
         }
 
-        const pixelSize = initSizeY + e.clientY - initPosY;
-        const percent = CalcPercentY(pixelSize);
+        const h = window.screen.height;
+        const pixelSizeY = (initSizeY + e.clientY - initPosY);
+        const percent = CalcPercentY(pixelSizeY);
+        console.log("relation",pixelSizeY, pixelSizeY / pixelSizeX);
+        setImageY(`${pixelSizeY/pixelSizeX}`); //pixelSizeY
 
-        setImageY(`${pixelSize}px`);
+        return {x:`${percentX}%`,y:`${pixelSizeY/pixelSizeX}`}
     }
 
     const CalcPercentX = (pixelSize:number)=>{
-        return pixelSize / window.innerHeight * 100;
+        return pixelSize / window.innerWidth * 100;
     }
     const CalcPercentY = (pixelSize:number)=>{
         return pixelSize / window.screen.height * 100;
@@ -89,12 +101,11 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
     }
 
     useEffect(()=>{
-        console.log(imageX);
     },[imageX])
 
-    const save = async () => {
+    const save = async (imgX:string,imgY:string) => {
         if(blogPost === null){return;}
-        console.log(imageX);
+
         var newBlog:BlogInterface = {
             author:blogPost.author,
             content:[...blogPost.content],
@@ -107,15 +118,15 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
         if(dir === "left"){
             var img = blogPost.content[index].imgLeft;
             if(img === null){return;}
-            img.sizeX = imageX;
-            img.sizeY = imageY;
+            img.sizeX = imgX;
+            img.sizeY = imgY;
             
             newBlog.content[index].imgLeft = img;
         }else{
             var img = blogPost.content[index].imgRight;
             if(img === null){return;}
-            img.sizeX = imageX;
-            img.sizeY = imageY;
+            img.sizeX = imgX;
+            img.sizeY = imgY;
             
             newBlog.content[index].imgRight = img;
         }
@@ -127,15 +138,35 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
         return <></>
     }
 
+    const GetHeight = (sizeX:string,sizeY:string):string=>{
+        console.log("Get hieght", sizeX,sizeY);
+        var val = 0;
+        if(sizeX.charAt(sizeX.length - 1) === "%"){
+            var x = sizeX.slice(0, sizeX.length - 2);
+            
+            //val = window.screen.width * (parseFloat(x) / 100) * parseFloat(sizeY)
+            val = window.innerWidth * parseFloat(x) / 100;
+            val = val * parseFloat(sizeY);
+
+            //console.log(x,val,parseFloat(x)/100,window.screen.width,sizeY);
+        }else{
+            console.log(parseFloat(sizeY), parseFloat(sizeX.slice(0,sizeX.length - 2)));
+            val = parseFloat(sizeY)*parseFloat(sizeX.slice(0,sizeX.length - 2))
+        }
+        return `${val}px`
+    }
+
     return(
         <div className="imgParent">
             <div
                 draggable="true"
                 onDragStart={initial}
-                onDrag={resize}
+                onDrag={(e)=>resize(e,true)}
                 onDragEnd={(e)=>{
-                    resize(e);
-                    save();
+                    var cords:{x:string,y:string} = resize(e,false);
+                    setTimeout(()=>{
+                        save(cords.x,cords.y);
+                    },500)
                 }}
                 onClick={() => updateShowSettings(!showSettings)}
                 style={{cursor:"none"}}
@@ -153,7 +184,7 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
                         float:dir,
                         borderRadius:"25px",
                         width:imageX,
-                        height:imageY,
+                        height:GetHeight(imageX,imageY)
                     }}
                     draggable="false"
                 />
