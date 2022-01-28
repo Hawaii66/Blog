@@ -41,6 +41,20 @@ function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
         setBlogPost(post);
     }
 
+    const move = (dir:"Up"|"Down") => {
+        var post = blogPost
+        if(post === null || blogPost === null){return;}
+        if(setBlogPost === null){return;}
+
+        post.content = [...blogPost.content];
+
+        var currentPost = post.content[index];
+        post.content.splice(index, 1);
+        post.content.splice(index + (1 * (dir === "Up" ? -1 : 1)), 0, currentPost);
+
+        setBlogPost(post);
+    }
+
     const remove = () => {
         var post = blogPost
         if(post === null || blogPost === null){return;}
@@ -54,9 +68,11 @@ function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
     return (
         <div className="center">
             <ButtonGroup className={`${lastToggle ? "Middle" : "End"}`}>
+                {index !== 0 && !lastToggle && <Button onClick={()=>move("Up")} className="Icon Up" variant="primary"></Button>}
                 {lastToggle && <Button onClick={save} variant="primary">Spara</Button>}
-                {!lastToggle && <Button className="Trash" onClick={remove} variant="danger"></Button>}
-                <Button className="Create" onClick={createAbove} variant="secondary"></Button>
+                {!lastToggle && <Button className="Icon Trash" onClick={remove} variant="danger"></Button>}
+                <Button className="Icon Create" onClick={createAbove} variant="secondary"></Button>
+                {blogPost?.content.length && index < blogPost.content.length - 1 && <Button className="Icon Down" onClick={()=>move("Down")} variant="primary"></Button>}
             </ButtonGroup> 
         </div>
     )
