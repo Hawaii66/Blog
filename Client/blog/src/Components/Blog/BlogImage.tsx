@@ -89,15 +89,12 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
     }
 
     const CalcPercentX = (pixelSize:number)=>{
-        return pixelSize / window.innerWidth * 100;
+        return pixelSize / (window.innerWidth*0.6) * 100;
     }
 
     const updateShowSettings = (b:boolean) => {
         setShowSettings(b);
     }
-
-    useEffect(()=>{
-    },[imageX])
 
     const save = async (imgX:string,imgY:string) => {
         if(blogPost === null){return;}
@@ -140,7 +137,7 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
         if(sizeX.charAt(sizeX.length - 1) === "%"){
             var x = sizeX.slice(0, sizeX.length - 2);
             
-            val = window.innerWidth * parseFloat(x) / 100;
+            val = (window.innerWidth*0.6) * parseFloat(x) / 100;
             val = val * parseFloat(sizeY);
         }
         else
@@ -175,9 +172,9 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
                     style={{
                         objectFit:"cover",
                         objectPosition:"50% 50%",
-                        margin:"1rem",
+                        margin:"0.2rem",
                         float:dir,
-                        borderRadius:"25px",
+                        borderRadius:"10px",
                         width:imageX,
                         height:GetHeight(imageX,imageY)
                     }}
