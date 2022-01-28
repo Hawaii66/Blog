@@ -76,7 +76,8 @@ function BlogTextModal({setShow, index}:Props) {
 
         if(info === null){return;}
         setShow(false);
-        setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));;
+        setBlogPost(info);
+        //setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));;
     }
 
     useEffect(()=>{
@@ -114,7 +115,7 @@ function BlogTextModal({setShow, index}:Props) {
     }
     
     return (
-        <Modal show={true} onHide={() => updateShowSettings(false)}>
+        <Modal dialogClassName="ModalSize" show={true} onHide={() => updateShowSettings(false)}>
                 <Modal.Header closeButton>
                     <Modal.Title>Text Inställningar</Modal.Title>
                 </Modal.Header>
@@ -126,7 +127,7 @@ function BlogTextModal({setShow, index}:Props) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Text</Form.Label>
-                            <Form.Control ref={textRef} as="textarea" rows={3} />
+                            <Form.Control ref={textRef} as="textarea" rows={6} />
                         </Form.Group>
                         <Form.Group controlId="formFile" className="mb-3">
                             <Form.Label>Vänster bild</Form.Label>

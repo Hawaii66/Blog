@@ -52,7 +52,7 @@ function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
     }
 
     return (
-        <div>
+        <div className="center">
             <ButtonGroup className={`${lastToggle ? "Middle" : "End"}`}>
                 {lastToggle && <Button onClick={save} variant="primary">Spara</Button>}
                 {!lastToggle && <Button onClick={remove} variant="danger">Ta bort</Button>}

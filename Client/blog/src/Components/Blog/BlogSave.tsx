@@ -1,7 +1,9 @@
 import React, {useRef,useContext} from 'react'
 import { Modal, Button, Form } from 'react-bootstrap';
+import { StaticContext } from '../../Contexts/StaticContext';
+import { UserContext } from '../../Contexts/UserContext';
 import { BlogInterface } from '../../Interfaces/BlogInterface';
-import { BlogContext } from './Blog';
+import { BlogContext, CloudSave } from './Blog';
 
 export interface Props{
     setShow:React.Dispatch<React.SetStateAction<boolean>>
@@ -9,8 +11,9 @@ export interface Props{
 
 function BlogSave({setShow}:Props) {
     const {blogPost, setBlogPost} = useContext(BlogContext);
+    const {apiEndPoint} = useContext(StaticContext);
+    const {accessToken,refreshToken} = useContext(UserContext);
 
-    
     const cancelSave = () => {
         setShow(false);
     }
@@ -27,12 +30,12 @@ function BlogSave({setShow}:Props) {
             language:blogPost?.language,
             publishDate:Date.now(),
             title:name,
-            id:""
+            id:blogPost.id
         }
 
-        console.log(info,"tset");
-
-        
+        var newBlog = await CloudSave(info, apiEndPoint, accessToken, refreshToken);
+        setBlogPost(newBlog);
+        cancelSave();
     }
 
     const nameRef = useRef<HTMLInputElement>(null);

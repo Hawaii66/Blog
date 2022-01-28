@@ -1,7 +1,10 @@
-import React, { useCallback, useRef, useState } from 'react'
-import { EditorSettings } from './Blog';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { BlogContext, CloudSave, EditorSettings } from './Blog';
 import { BlogImageInterface, BlogInterface } from '../../Interfaces/BlogInterface'
 import BlogImageModal from './BlogImageModal';
+import BlogContent from './BlogContent';
+import { StaticContext } from '../../Contexts/StaticContext';
+import { UserContext } from '../../Contexts/UserContext';
 
 export interface Props{
     image:BlogImageInterface|null,
@@ -21,7 +24,11 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
     const [imageY, setImageY] = useState<string>((image === null) ? "0" : image?.sizeY);
 
     const resizeRef = useRef<HTMLImageElement>(null);
-    
+
+    const {blogPost,setBlogPost} = useContext(BlogContext);
+    const {apiEndPoint} = useContext(StaticContext);
+    const {accessToken, refreshToken} = useContext(UserContext);
+
     const initial = (e:any) => {
         if(!editorSettings.isEditor){return;}
 
@@ -46,19 +53,74 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
 
         let resizable = resizeRef.current;
         if(resizable === null || initSizeX === undefined || initSizeY === undefined){return;}
+        
+        if(e.clientX === 0 || e.clientY === 0){
+            return;
+        }
 
         if(dir === "left"){
-            setImageX(`${initSizeX + e.clientX - initPosX}px`);
+            const pixelSize = initSizeX + e.clientX - initPosX;
+            const percent = CalcPercentX(pixelSize);
+
+            setImageX(`${percent}%`);
         }
         else{
-            setImageX(`${initSizeX + (e.clientX - initPosX)*-1}px`);
+            const pixelSize = initSizeX + (e.clientX - initPosX)*-1;
+            const percent = CalcPercentX(pixelSize);
+
+            setImageX(`${percent}%`);
         }
 
-        setImageY(`${initSizeY + e.clientY - initPosY}px`);
+        const pixelSize = initSizeY + e.clientY - initPosY;
+        const percent = CalcPercentY(pixelSize);
+
+        setImageY(`${pixelSize}px`);
+    }
+
+    const CalcPercentX = (pixelSize:number)=>{
+        return pixelSize / window.innerHeight * 100;
+    }
+    const CalcPercentY = (pixelSize:number)=>{
+        return pixelSize / window.screen.height * 100;
     }
 
     const updateShowSettings = (b:boolean) => {
         setShowSettings(b);
+    }
+
+    useEffect(()=>{
+        console.log(imageX);
+    },[imageX])
+
+    const save = async () => {
+        if(blogPost === null){return;}
+        console.log(imageX);
+        var newBlog:BlogInterface = {
+            author:blogPost.author,
+            content:[...blogPost.content],
+            id:blogPost.id,
+            language:blogPost.language,
+            publishDate:blogPost.publishDate,
+            title:blogPost.title
+        }
+
+        if(dir === "left"){
+            var img = blogPost.content[index].imgLeft;
+            if(img === null){return;}
+            img.sizeX = imageX;
+            img.sizeY = imageY;
+            
+            newBlog.content[index].imgLeft = img;
+        }else{
+            var img = blogPost.content[index].imgRight;
+            if(img === null){return;}
+            img.sizeX = imageX;
+            img.sizeY = imageY;
+            
+            newBlog.content[index].imgRight = img;
+        }
+
+        setBlogPost(await CloudSave(newBlog, apiEndPoint, accessToken, refreshToken));
     }
 
     if(image == null){
@@ -71,10 +133,13 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
                 draggable="true"
                 onDragStart={initial}
                 onDrag={resize}
-                onDragEnd={resize}
+                onDragEnd={(e)=>{
+                    resize(e);
+                    save();
+                }}
                 onClick={() => updateShowSettings(!showSettings)}
                 style={{cursor:"none"}}
-            >
+                >
                 <img
                     className="Image"
                     ref={resizeRef}

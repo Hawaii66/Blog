@@ -215,6 +215,7 @@ export const CloudSave:CloudSaveType = async(blogPost,apiEndPoint,accessToken,up
         blog:blogPost,
         id:blogPost.id
     }
+    
     var saveResult = await fetch(`${apiEndPoint}/blog/save`,{
         method:"POST",
         body: JSON.stringify(data),

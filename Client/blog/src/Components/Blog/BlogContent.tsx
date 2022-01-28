@@ -18,13 +18,14 @@ function BlogContent({content, index, editorSettings, setEditorSettings}:Props) 
     const [showPModal, setShowP] = useState(false);
 
     return (
-        <div>
-            <div key={index} style={{width:"1500px",margin:"auto",overflow:"auto"}}>
+        <div style={{marginTop:"2rem"}}>
+            <div key={index} style={{paddingTop:"1rem",border:"1px rgba(1,1,1,0.2) solid",width:"1500px",margin:"auto",overflow:"auto"}}>
+                {editorSettings.isEditor && <BlogEditorButtons saveButtonPressed={()=>console.log("Error")} lastToggle={false} index={index}/>}
                 <div style={{margin:"0.8em",display:"flex",alignItems:"center"}}>
                     <h2 onClick={()=>setShowP(true)} style={{display:"inline-block",margin:"auto",marginTop:"2rem",textAlign:"center",borderBottom:"1px solid black"}}>
                         {content.title}
                     </h2>
-                    {editorSettings.isEditor && <BlogEditorButtons saveButtonPressed={()=>console.log("Error")} lastToggle={false} index={index}/>}
+                    
                 </div>
                 <BlogImage index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
                 <BlogImage index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
