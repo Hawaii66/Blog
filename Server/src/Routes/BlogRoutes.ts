@@ -127,7 +127,10 @@ export const BlogRoutes = (app:Express) => {
                 title:"Chapter title here"
             }],
             id:"",
-            language:"EN",
+            language:{
+                code:"En",
+                name:"English"
+            },
             publishDate:Date.now(),
             title:"Title Here"
         }

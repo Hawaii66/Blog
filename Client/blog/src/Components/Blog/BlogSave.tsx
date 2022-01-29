@@ -1,8 +1,9 @@
-import React, {useRef,useContext} from 'react'
-import { Modal, Button, Form } from 'react-bootstrap';
+import React, {useRef,useContext, useState} from 'react'
+import { Modal, Button, Form, Dropdown } from 'react-bootstrap';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext';
 import { BlogInterface } from '../../Interfaces/BlogInterface';
+import { Language, Languages } from '../../Interfaces/StaticInterface';
 import { BlogContext, CloudSave } from './Blog';
 
 export interface Props{
@@ -10,6 +11,11 @@ export interface Props{
 }
 
 function BlogSave({setShow}:Props) {
+    const [lang,setLang] = useState<Language>({
+        code:"",
+        name:""
+    });
+    
     const {blogPost, setBlogPost} = useContext(BlogContext);
     const {apiEndPoint} = useContext(StaticContext);
     const {accessToken,refreshToken} = useContext(UserContext);
@@ -27,7 +33,7 @@ function BlogSave({setShow}:Props) {
         var info:BlogInterface = {
             author:blogPost.author,
             content:[...blogPost.content],
-            language:blogPost?.language,
+            language:lang,
             publishDate:Date.now(),
             title:name,
             id:blogPost.id
@@ -36,6 +42,15 @@ function BlogSave({setShow}:Props) {
         var newBlog = await CloudSave(info, apiEndPoint, accessToken, refreshToken);
         setBlogPost(newBlog);
         cancelSave();
+    }
+
+    const changeLang = (e:React.ChangeEvent<HTMLSelectElement>) => {
+        for(var i = 0; i < Languages.length; i ++){
+            if(Languages[i].code === e.target.value){
+                setLang(Languages[i]);
+                return;
+            }
+        }
     }
 
     const nameRef = useRef<HTMLInputElement>(null);
@@ -50,6 +65,17 @@ function BlogSave({setShow}:Props) {
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Blog namn</Form.Label>
                             <Form.Control defaultValue={blogPost === null ? "" : blogPost.title} ref={nameRef} type="text"/>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                            <Form.Label>Språk</Form.Label>
+                            <Form.Select onChange={(e)=>changeLang(e)} aria-label="Default select example">
+                                {Languages.map((lang, i)=>{
+                                    return(
+                                        <option key={i} value={lang.code}>{lang.name}</option>
+                                    )
+                                })}
+                            </Form.Select>
                         </Form.Group>
                     </Form>
                 </Modal.Body>

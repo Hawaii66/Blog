@@ -92,7 +92,10 @@ function Blog({edit}:Props) {
         author:"HawaiiDev",
         id:"1",
         publishDate:Date.now(),
-        language:"EN",        
+        language:{
+            code:"En",
+            name:"English"
+        },        
         content:[
             {
                 title:"Chapter 1",
@@ -179,13 +182,12 @@ function Blog({edit}:Props) {
     return (
         <div>
             <BlogContext.Provider value={{blogPost,setBlogPost:setPost}}>
-                <h1 style={{textAlign:"center"}}>{blogPost.title}</h1>
-                <p 
-                    style={{
-                        textAlign:"center"
-                    }}>
+                <h1 className="center">{blogPost.title}</h1>
+                <h5 className="center">
                     <Link to={`/?author=${blogPost.author}`}>{user}</Link>
-                    {": "}
+                </h5>
+                <p className="center">
+                    {blogPost.language.name}{`: `} 
                     {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
                 </p>
 

@@ -1,8 +1,10 @@
+import { Language } from "./StaticInterface";
+
 export interface BlogInterface {
     title:string,
     author:string,
     publishDate:number,
-    language:string,
+    language:Language,
     content:BlogContentInterface[],
     id:string
 }
