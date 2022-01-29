@@ -111,7 +111,7 @@ function SearchResults() {
             </ListGroup>
             :
             <Alert style={{minWidth:"30%",textAlign:"center"}} variant={"warning"}>
-                No User or Blog found with "{query.get("search")}"
+                Ingen användare eller blogg hittades med: "{query.get("search")}"
             </Alert>
             }
         </div>    
