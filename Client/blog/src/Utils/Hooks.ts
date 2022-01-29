@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 export function useQuery() {
@@ -9,7 +9,7 @@ export function useQuery() {
 
 export function useWindowSize() {
     const [size, setSize] = useState([0, 0]);
-    useLayoutEffect(() => {
+    useEffect(() => {
       function updateSize() {
         setSize([window.innerWidth, window.innerHeight]);
       }

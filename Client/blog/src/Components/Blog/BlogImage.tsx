@@ -10,10 +10,11 @@ export interface Props{
     image:BlogImageInterface|null,
     dir:"left"|"right",
     editorSettings:EditorSettings,
-    index:number
+    index:number,
+    min:boolean
 }
 
-function BlogImage({image, dir, editorSettings, index}:Props) {
+function BlogImage({image, min, dir, editorSettings, index}:Props) {
     const [initPosX, setInitPosX] = useState<number>(0);
     const [initPosY, setInitPosY] = useState<number>(0);
     const [initSizeX, setInitSizeX] = useState<undefined|number>(0);
@@ -144,6 +145,28 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
             val = parseFloat(sizeY)*parseFloat(sizeX.slice(0,sizeX.length - 2))
         }
         return `${val}px`
+    }
+
+    if(min){
+        return(
+            <div>
+                <img
+                    ref={resizeRef}
+                    key={image.link} 
+                    src={image.link} 
+                    alt={image.alt}
+                    style={{
+                        objectFit:"cover",
+                        objectPosition:"50% 50%",
+                        margin:"0.2rem",
+                        borderRadius:"10px",
+                        width:imageX,
+                        height:GetHeight(imageX,imageY)
+                    }}
+                    draggable="false"
+                />
+            </div>
+        )
     }
 
     return(

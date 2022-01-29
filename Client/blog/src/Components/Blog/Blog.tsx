@@ -183,7 +183,7 @@ function Blog({edit}:Props) {
 
                 {blogPost.content.map((item,index)=>{
                     return(
-                        <BlogContent setEditorSettings={setEditorSettings} editorSettings={editorSettings} key={Math.random()*100} content={item} index={index} />
+                        <BlogContent screenWidth={width} setEditorSettings={setEditorSettings} editorSettings={editorSettings} key={Math.random()*100} content={item} index={index} />
                     )
                 })}
                 {editorSettings.isEditor && <BlogEditorButtons onlySave={false} saveButtonPressed={saveAll} lastToggle={true} index={blogPost.content.length}/>}
