@@ -157,7 +157,7 @@ function Blog({edit}:Props) {
         )
     }
 
-    if(width < 992){
+    if(editorSettings.isEditor && width < 992){
         return(
             <div className="auto">
                 <Alert className="Def4090 center" variant={"danger"}>
