@@ -11,6 +11,7 @@ Thanks to web dev simplifed https://www.youtube.com/watch?v=7Q17ubqLfaM&t=95s fo
     <li>Publish client to Netlify</li>
     <li>Publish server to Heroku / AWS with docker</li>
     <li>Learn CI</li>
+    <li>Break point for images on mobile to stack under and over instead of to the sides</li>
 </ul>
 
 Bugs:
