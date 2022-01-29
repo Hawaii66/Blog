@@ -27,20 +27,6 @@
     max-width: 60% !important;
 }
 
-.Icon::after {
-    background-size: cover;
-    content: "";
-    width: 1rem;
-    height: 1rem;
-    display: block;
-    float: right;
-    margin: auto;
-    margin-right: 0px;
-    margin-top: 0.1rem;
-    margin-bottom: 0.1rem;
-    padding: 0px;
-}
-
 .Trash::after {
     background-image: url("../../Svg/Trash.svg");
 }
@@ -55,4 +41,16 @@
 
 .Down::after {
     background-image: url("../../Svg/DownArrow.svg");
+}
+
+.Upload::after {
+    background-image: url("../../Svg/Upload.svg");
+}
+
+.OffcanvasImpBase {
+    z-index: 1145 !important;
+}
+
+.fade {
+    z-index: 1140 !important;
 }

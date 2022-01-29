@@ -1,8 +1,10 @@
-import React, { useContext, useRef, useEffect } from 'react'
-import { Modal, Button, Form } from 'react-bootstrap';
+import React, { useContext, useRef, useEffect, useState } from 'react'
+import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext';
+import { BlogImageInterface, BlogInterface } from '../../Interfaces/BlogInterface';
 import { BlogContext, CloudSave } from './Blog';
+import ImageSelect from './ImageSelect';
 
 export interface Props{
     setShow:React.Dispatch<React.SetStateAction<boolean>>,
@@ -10,6 +12,8 @@ export interface Props{
 }
 
 function BlogTextModal({setShow, index}:Props) {
+    const [unSavedBlog, setUnSaved] = useState<BlogInterface|null>(null);
+ 
     const {blogPost,setBlogPost} = useContext(BlogContext);
     const {apiEndPoint} = useContext(StaticContext);
     const {accessToken,refreshToken} = useContext(UserContext);
@@ -80,6 +84,34 @@ function BlogTextModal({setShow, index}:Props) {
         //setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));;
     }
 
+    const CloudSave = async () =>{
+        if(textRef === null || textRef.current === null || textRef.current.value === null){return;}
+        if(titleRef === null ||titleRef.current === null ||titleRef.current.value === null){return;}
+
+        console.log("Cloud save");
+
+        if(blogPost === null){return;}
+        if(unSavedBlog === null){return;}
+
+        var info:BlogInterface = {
+            title:blogPost.title,
+            author:blogPost.author,
+            content:[...blogPost.content],
+            id:blogPost.id,
+            language:blogPost.language,
+            publishDate:blogPost.publishDate
+        }
+
+        info.content[index] = unSavedBlog.content[index];
+        info.content[index].text = textRef.current.value;
+        info.content[index].title = titleRef.current.value;
+
+        console.log(textRef,titleRef);
+        console.log("Finish", info);
+        setShow(false);
+        setBlogPost(info);
+    }
+
     useEffect(()=>{
         if(textRef === null || textRef.current === null || textRef.current.value === null){return;}
         if(titleRef === null || titleRef.current === null || titleRef.current.value === null){return;}
@@ -113,9 +145,40 @@ function BlogTextModal({setShow, index}:Props) {
         result = await result.json();
         return "http://localhost:5000"+result.filePath;
     }
+
+    const ChangeImage = (img:BlogImageInterface|null,dir:"Left"|"Right") => {
+        if(blogPost === null){return;}
+
+        var info:BlogInterface = {
+            author:blogPost.author,
+            content:[...blogPost.content],
+            id:blogPost.id,
+            language:blogPost.language,
+            publishDate:blogPost.publishDate,
+            title:blogPost.title
+        }
+
+        if(dir === "Left"){
+            info.content[index].imgLeft = img;
+        }else{
+            info.content[index].imgRight = img;
+        }
+
+        setUnSaved(info);
+        //setBlogPost(info);
+    }
+
+    const cancelSettings = () =>{
+        setUnSaved(null);
+        updateShowSettings(false)
+    }
+
+    useEffect(()=>{
+        setUnSaved(blogPost);
+    },[])
     
     return (
-        <Modal dialogClassName="ModalSize" show={true} onHide={() => updateShowSettings(false)}>
+        <Modal dialogClassName="ModalSize" show={true} onHide={cancelSettings}>
                 <Modal.Header closeButton>
                     <Modal.Title>Text Inställningar</Modal.Title>
                 </Modal.Header>
@@ -129,35 +192,15 @@ function BlogTextModal({setShow, index}:Props) {
                             <Form.Label>Text</Form.Label>
                             <Form.Control ref={textRef} as="textarea" rows={6} />
                         </Form.Group>
-                        <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Vänster bild</Form.Label>
-                            <Form.Check
-                                ref={leftImgRef} 
-                                type={"checkbox"}
-                            />
-                            <Form.Control ref={leftAltRef} type="text" placeholder='Alternativ Text' />
-                            <Form.Group controlId="formFile" className="mb-3">
-                                <Form.Control ref={fileInputRefLeft} accept='image/jpeg,image/png' type="file" />
-                            </Form.Group>
-                        </Form.Group>
-                        <Form.Group controlId="formFile" className="mb-3">
-                            <Form.Label>Höger bild</Form.Label>
-                            <Form.Check 
-                                ref={rightImgRef}
-                                type={"checkbox"}
-                            />
-                            <Form.Control ref={rightAltRef} type="text" placeholder='Alternativ Text' />
-                            <Form.Group controlId="formFile" className="mb-3">
-                                <Form.Control ref={fileInputRefRight} accept='image/jpeg,image/png' type="file" />
-                            </Form.Group>
-                        </Form.Group>
+                        <ImageSelect dir="Left" img={(unSavedBlog === null) ? null : unSavedBlog.content[index].imgLeft} setImg={(i)=>ChangeImage(i,"Left")}/>
+                        <ImageSelect dir="Right" img={(unSavedBlog === null) ? null : unSavedBlog.content[index].imgRight} setImg={(i)=>ChangeImage(i,"Right")}/>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={() => updateShowSettings(false)}>
+                    <Button variant="secondary" onClick={cancelSettings}>
                         Stäng
                     </Button>
-                    <Button variant="primary" onClick={save}>
+                    <Button variant="primary" onClick={CloudSave}>
                         Spara ändringar
                     </Button>
                 </Modal.Footer>

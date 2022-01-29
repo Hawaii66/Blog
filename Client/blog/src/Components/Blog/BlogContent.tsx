@@ -29,7 +29,7 @@ function BlogContent({content, index, editorSettings, setEditorSettings}:Props) 
                 </div>
                 <BlogImage index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
                 <BlogImage index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
-                <p onClick={()=>setShowP(true)} style={{minHeight:"120px"}}>{content.text}</p>
+                <p onClick={()=>{console.log("Wier");setShowP(true)}} style={{minHeight:"120px"}}>{content.text}</p>
                 {showPModal && editorSettings.isEditor && <BlogTextModal index={index} setShow={setShowP} />}
 
             </div>

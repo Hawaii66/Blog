@@ -7,3 +7,35 @@
     justify-content: center;
     align-items: center;
 }
+
+.Icon::after {
+    background-size: cover;
+    content: "";
+    width: 1rem;
+    height: 1rem;
+    display: block;
+    float: right;
+    margin: auto;
+    margin-right: 0px;
+    margin-top: 0.1rem;
+    margin-bottom: 0.1rem;
+    padding: 0px;
+}
+
+.Big::after {
+    width: 10rem !important;
+    height: 10rem !important;
+}
+
+.HideBootstrap {
+    display: none !important;
+    content: "";
+}
+
+.auto {
+    margin: auto;
+}
+
+.textCenter {
+    text-align: center;
+}
