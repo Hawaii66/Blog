@@ -49,7 +49,7 @@ function BlogSave({setShow}:Props) {
                     <Form>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Blog namn</Form.Label>
-                            <Form.Control ref={nameRef} type="text"/>
+                            <Form.Control defaultValue={blogPost === null ? "" : blogPost.title} ref={nameRef} type="text"/>
                         </Form.Group>
                     </Form>
                 </Modal.Body>

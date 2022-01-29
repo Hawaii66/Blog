@@ -186,11 +186,11 @@ function BlogTextModal({setShow, index}:Props) {
                     <Form>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Titel</Form.Label>
-                            <Form.Control ref={titleRef} type="text"/>
+                            <Form.Control defaultValue={blogPost === null ? "" : blogPost.content[index].title} ref={titleRef} type="text"/>
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Text</Form.Label>
-                            <Form.Control ref={textRef} as="textarea" rows={6} />
+                            <Form.Control defaultValue={blogPost === null ? "" : blogPost.content[index].text} ref={textRef} as="textarea" rows={6} />
                         </Form.Group>
                         <ImageSelect dir="Left" img={(unSavedBlog === null) ? null : unSavedBlog.content[index].imgLeft} setImg={(i)=>ChangeImage(i,"Left")}/>
                         <ImageSelect dir="Right" img={(unSavedBlog === null) ? null : unSavedBlog.content[index].imgRight} setImg={(i)=>ChangeImage(i,"Right")}/>

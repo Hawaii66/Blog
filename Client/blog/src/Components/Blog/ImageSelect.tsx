@@ -127,7 +127,7 @@ function ImageSelect({img,setImg,dir}:Props) {
                             <Form.Label>Välj Bild:</Form.Label>
                         </Col>
                         <Col style={{marginBottom:"0.5rem"}}>
-                            <Form.Control ref={urlRef} type="text" placeholder='URL'/>
+                            <Form.Control defaultValue={img === null ? "" : img.link} ref={urlRef} type="text" placeholder='URL'/>
                         </Col>
                         <Col xs={2} style={{marginBottom:"0.5rem"}}>
                             <Button onClick={handleShow} className="Icon Upload" variant="primary">
@@ -140,7 +140,7 @@ function ImageSelect({img,setImg,dir}:Props) {
                             <Form.Label>Alternativ Text:</Form.Label>
                         </Col>
                         <Col>
-                            <Form.Control onChange={(e)=>SetAltText(e)} type="text" placeholder='...' />
+                            <Form.Control defaultValue={img === null ? "" : img.alt} onChange={(e)=>SetAltText(e)} type="text" placeholder='...' />
                         </Col>
                     </Row>
                 </Container>
