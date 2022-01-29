@@ -157,10 +157,11 @@ export const BlogRoutes = (app:Express) => {
                 name:"English"
             },
             publishDate:Date.now(),
-            title:""
+            title:"Temporär titel på din nya blog"
         }
 
         const newBlog = await CreateBlog(blog);
+        await UserAddBlog(newBlog.author,newBlog.id);
         res.status(201).json(newBlog);
     });
 }
