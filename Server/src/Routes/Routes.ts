@@ -1,5 +1,6 @@
 import {Express, Request, Response} from "express";
-import { AuthRoutes } from "./AuthRoutes";
+import { UserAddImage } from "../Database/AccountDB";
+import { AuthRoutes, AuthToken } from "./AuthRoutes";
 import { BlogRoutes } from "./BlogRoutes";
 
 const multer = require("multer");
@@ -18,16 +19,18 @@ export const Routes = (app:Express) => {
         })
     });
 
-    app.post("/images", upload.single("image"), async (req:any, res:Response) => {
+    app.post("/images", AuthToken, upload.single("image"), async (req:any, res:Response) => {
         const file = req.file;
         //const body = req.body;
-
+        console.log(process.env.API_WEBSITE);
         const result = await uploadFile(file);
+        const filePath = `${process.env.API_WEBSITE}/images/${result.key}`;
 
         await unlinkFile(file.path);
+        await UserAddImage(req.id,filePath);
 
         res.status(200).json({
-            filePath:`/images/${result.key}`
+            filePath:filePath
         });
     });
 

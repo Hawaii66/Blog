@@ -87,6 +87,14 @@ export const AuthRoutes = (app:Express) => {
         res.status(200).json(user);
     });
 
+    app.get("/users/get/images/:id", async(req,res)=>{
+        const user:User|null = await GetUser(req.params.id);
+        
+        if(user === null){return res.status(500).send("No user found");}
+
+        res.status(200).json(user.images);
+    });
+
     app.delete("/users/delete", async (req,res)=>{
         await RemoveToken(req.body.token);
         res.sendStatus(204);
