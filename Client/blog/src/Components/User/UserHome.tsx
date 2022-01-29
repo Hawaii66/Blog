@@ -3,6 +3,7 @@ import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext'
+import { BlogInterface } from '../../Interfaces/BlogInterface';
 import { useQuery, useWindowSize } from '../../Utils/Hooks';
 import BlogPreview from './BlogPreview';
 
@@ -11,8 +12,9 @@ import "./User.css";
 function UserHome() {
     const [author, setUser] = useState<{name:string,blogs:string[]}|null>(null);
 
-    const {apiEndPoint} = useContext(StaticContext);
-    const {user} = useContext(UserContext);
+    const {apiEndPoint, website} = useContext(StaticContext);
+    const {user,accessToken,refreshToken} = useContext(UserContext);
+    
     const location = useLocation();
     const query = useQuery();
     const [width,heigh] = useWindowSize();
@@ -29,6 +31,49 @@ function UserHome() {
                 blogs:[]
             });
         }
+    }
+
+    const CreateBlog = async () => {
+        if(user === null){return;}
+
+        const info:BlogInterface = {
+            author:user.name,
+            content:[],
+            id:"",
+            language:{
+                code:"En",
+                name:"English"
+            },
+            publishDate:Date.now(),
+            title:""
+        }
+
+        var result = await fetch(`${apiEndPoint}/blog/create`,{
+            method:"POST",
+            headers:{
+                "Authorization":`Bearer ${accessToken}`,
+                "Content-Type":"application/json"
+            }
+        });
+
+        if(result.status !== 201){
+            var t = await refreshToken();
+            result = await fetch(`${apiEndPoint}/blog/create`,{
+                method:"POST",
+                headers:{
+                    "Authorization":`Bearer ${t}`,
+                    "Content-Type":"application/json"
+                }
+            });
+
+            if(result.status !== 201){
+                return;
+            }
+        }
+
+        var data:BlogInterface = await result.json();
+        const link = `/edit/?id=${data.id}`;
+        window.location.assign(`${website}${link}`);
     }
 
     useEffect(()=>{
@@ -48,7 +93,7 @@ function UserHome() {
                         )
                     })}
                     <Col>
-                        <Button variant="primary">Skapa ny blog</Button>
+                        <Button onClick={CreateBlog} variant="primary">Skapa ny blog</Button>
                     </Col>
                 </Row>
             </div>

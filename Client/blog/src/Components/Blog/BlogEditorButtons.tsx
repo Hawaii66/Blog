@@ -24,19 +24,19 @@ function BlogEditorButtons({index,onlySave,lastToggle,saveButtonPressed}:Props) 
 
         post.content = [...blogPost.content];
         post.content.splice(index, 0, {
-            title:"Titel",
-            text:"Temporär text som inte ska synas",
+            title:"Titel på stycke",
+            text:"Text som ska berätta en sak om bilderna runt texten eller helt utan bilder. Klicka på mig och börja ändra hur jag ser ut. Bildernas storlek kan du ändra genom att dra på dem och se hur texten anpassar sig runt bilderna. Skapa en sektion ovanför mig genom att klicka på den gråa knappen. Om du har fler än ett stycke kan du ta bort mig genom att klicka på den röda knappen. Flytta mig upp eller ner med pilarna bredvid den gråa och röda knappen. :D",
             imgLeft:{
                 alt:"Alternativ text",
                 link:"https://unsplash.it/500/500",
                 sizeX:"30%",
-                sizeY:"5"
+                sizeY:"5.8"
             },
             imgRight:{
                 alt:"Alternativ text",
                 link:"https://unsplash.it/500/500",
                 sizeX:"40%",
-                sizeY:"2"
+                sizeY:"2.3"
             }
         });
         setBlogPost(post);
@@ -60,6 +60,7 @@ function BlogEditorButtons({index,onlySave,lastToggle,saveButtonPressed}:Props) 
         var post = blogPost
         if(post === null || blogPost === null){return;}
         if(setBlogPost === null){return;}
+        if(post.content.length < 2){return;} // Must have atleast one post
 
         post.content = [...blogPost.content];
         post.content.splice(index, 1);

@@ -119,12 +119,37 @@ export const BlogRoutes = (app:Express) => {
         if(user === null){return res.status(400).send("No user found");}
 
         const blog:BlogInterface = {
-            author:user.name,
+            author:user.id,
             content:[{
-                imgLeft:null,
-                imgRight:null,
-                text:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque quasi corrupti odit deleniti quas impedit repellendus ut amet quae nam praesentium ratione voluptatibus veniam suscipit sequi, beatae sint? Ratione soluta totam, nisi unde atque, sed perspiciatis et mollitia ipsam dolor rerum autem ut placeat dolorem numquam ea vero maxime reprehenderit ad quae eaque molestiae quisquam facilis. Iusto debitis nisi at non assumenda facilis minima rerum ea, voluptates nam eius doloremque? Rerum possimus optio dolor obcaecati repudiandae. Aliquid, sed. Vitae repellat eius, placeat ratione porro quia officiis eos exercitationem qui, distinctio, nulla recusandae! Unde minus nihil exercitationem reprehenderit mollitia eum quo. Ullam tenetur at similique architecto minima expedita dolore error, qui delectus voluptas voluptates nihil voluptatum atque provident praesentium quos veritatis, culpa porro tempora pariatur! Odit, fugit dolore pariatur molestiae nulla perspiciatis dignissimos reprehenderit voluptates eveniet id nam tempore ad officiis modi, veniam a minus consequuntur fugiat iste quasi voluptatum, sed ipsa repellendus minima! Quia, tempore vero iste ipsam nostrum quae incidunt nam saepe modi eaque ullam labore pariatur aliquam sunt consequatur consectetur numquam distinctio similique tempora maxime repellat. Sint doloremque, voluptate, quas inventore doloribus molestias aliquid ex autem ipsum consectetur ducimus. Magni asperiores deserunt delectus itaque ratione nulla velit qui.",
-                title:"Chapter title here"
+                title:"Titel på stycke",
+                text:"Text som ska berätta en sak om bilderna runt texten eller helt utan bilder. Klicka på mig och börja ändra hur jag ser ut. Bildernas storlek kan du ändra genom att dra på dem och se hur texten anpassar sig runt bilderna. Skapa en sektion ovanför mig genom att klicka på den gråa knappen. Om du har fler än ett stycke kan du ta bort mig genom att klicka på den röda knappen. Flytta mig upp eller ner med pilarna bredvid den gråa och röda knappen. :D",
+                imgLeft:{
+                    alt:"Alternativ text",
+                    link:"https://unsplash.it/500/500",
+                    sizeX:"30%",
+                    sizeY:"5.8"
+                },
+                imgRight:{
+                    alt:"Alternativ text",
+                    link:"https://unsplash.it/500/500",
+                    sizeX:"40%",
+                    sizeY:"2.3"
+                }
+            },{
+                title:"Titel på stycke",
+                text:"Text som ska berätta en sak om bilderna runt texten eller helt utan bilder. Klicka på mig och börja ändra hur jag ser ut. Bildernas storlek kan du ändra genom att dra på dem och se hur texten anpassar sig runt bilderna. Skapa en sektion ovanför mig genom att klicka på den gråa knappen. Om du har fler än ett stycke kan du ta bort mig genom att klicka på den röda knappen. Flytta mig upp eller ner med pilarna bredvid den gråa och röda knappen. :D",
+                imgLeft:{
+                    alt:"Alternativ text",
+                    link:"https://unsplash.it/500/500",
+                    sizeX:"30%",
+                    sizeY:"5.8"
+                },
+                imgRight:{
+                    alt:"Alternativ text",
+                    link:"https://unsplash.it/500/500",
+                    sizeX:"40%",
+                    sizeY:"2.3"
+                }
             }],
             id:"",
             language:{
@@ -132,7 +157,7 @@ export const BlogRoutes = (app:Express) => {
                 name:"English"
             },
             publishDate:Date.now(),
-            title:"Title Here"
+            title:""
         }
 
         const newBlog = await CreateBlog(blog);
