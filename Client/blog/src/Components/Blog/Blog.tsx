@@ -10,6 +10,7 @@ import { UserContext } from '../../Contexts/UserContext';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from '../../Utils/Hooks';
+import Loading from '../Loading';
 
 export interface EditorSettings {
     isEditor:boolean
@@ -142,11 +143,7 @@ function Blog({edit}:Props) {
 
     if(loading){
         return (
-            <div style={{height:"90vh",display:"flex",justifyContent:"center",alignItems:"center"}}>
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </Spinner>
-            </div>
+            <Loading/>
         )
     }
 
