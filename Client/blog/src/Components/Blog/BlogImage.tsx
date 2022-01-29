@@ -132,7 +132,6 @@ function BlogImage({image, dir, editorSettings, index}:Props) {
     }
 
     const GetHeight = (sizeX:string,sizeY:string):string=>{
-        console.log("Get hieght", sizeX,sizeY);
         var val = 0;
         if(sizeX.charAt(sizeX.length - 1) === "%"){
             var x = sizeX.slice(0, sizeX.length - 2);
