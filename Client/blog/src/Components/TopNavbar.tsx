@@ -22,14 +22,14 @@ function TopNavbar() {
   }
 
   return (
-      <Navbar style={{marginBottom:"2rem",borderBottom:"1px rgba(1,1,1,0.25) solid"}} expand="lg">
+      <Navbar style={{marginBottom:"2rem",borderBottom:"1px rgba(1,1,1,0.25) solid"}} expand="sm">
         <Container>
           <Navbar.Brand href="/">HawaiiDev Blog</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link href="/">Hem</Nav.Link>
-              <Nav.Link onClick={()=>RandomBlog()}>Random blog</Nav.Link>
+              {/*<Nav.Link onClick={()=>RandomBlog()}>Random blog</Nav.Link>*/}
               <NavDropdown title="Top användare" id="basic-nav-dropdown">
                 <NavDropdown.Item href={`${website}/?author=1642790786280:272676:user`}>Sebastian Ahlman</NavDropdown.Item>
               </NavDropdown>
