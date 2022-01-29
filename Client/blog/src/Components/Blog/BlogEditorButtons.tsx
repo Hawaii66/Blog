@@ -5,10 +5,11 @@ import { BlogContext } from './Blog';
 export interface Props{
     index:number,
     lastToggle:boolean,
+    onlySave:boolean,
     saveButtonPressed:()=>void
 }
 
-function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
+function BlogEditorButtons({index,onlySave,lastToggle,saveButtonPressed}:Props) {
     const {blogPost, setBlogPost} = useContext(BlogContext);
     
     const save = () => {
@@ -71,7 +72,7 @@ function BlogEditorButtons({index,lastToggle,saveButtonPressed}:Props) {
                 {index !== 0 && !lastToggle && <Button onClick={()=>move("Up")} className="Icon Up" variant="primary"></Button>}
                 {lastToggle && <Button onClick={save} variant="primary">Spara</Button>}
                 {!lastToggle && <Button className="Icon Trash" onClick={remove} variant="danger"></Button>}
-                <Button className="Icon Create" onClick={createAbove} variant="secondary"></Button>
+                {!onlySave && <Button className="Icon Create" onClick={createAbove} variant="secondary"></Button>}
                 {blogPost?.content.length && index < blogPost.content.length - 1 && <Button className="Icon Down" onClick={()=>move("Down")} variant="primary"></Button>}
             </ButtonGroup> 
         </div>

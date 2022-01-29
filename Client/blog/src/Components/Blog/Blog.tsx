@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { Container, Row, Col, Spinner } from 'react-bootstrap'
+import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap'
 import { BlogInterface } from '../../Interfaces/BlogInterface';
 import BlogContent from './BlogContent';
 
@@ -9,7 +9,7 @@ import BlogSave from './BlogSave';
 import { UserContext } from '../../Contexts/UserContext';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { Link, useLocation } from 'react-router-dom';
-import { useQuery } from '../../Utils/Hooks';
+import { useQuery, useWindowSize } from '../../Utils/Hooks';
 import Loading from '../Loading';
 
 export interface EditorSettings {
@@ -88,6 +88,8 @@ function Blog({edit}:Props) {
     const [showSaveWindow, setShowSaveWindow] = useState(false);
     const [loading,setLoading] = useState(true);
 
+    const [width, height] = useWindowSize();
+
     let query = useQuery();
 
     const [blogPost, setBlogPost] = useState<BlogInterface>({
@@ -155,6 +157,18 @@ function Blog({edit}:Props) {
         )
     }
 
+    if(width < 992){
+        return(
+            <div className="auto">
+                <Alert className="Def4090 center" variant={"danger"}>
+                    !! Varning !! Du kan inte redigera en blog om din skärms storlek är för liten
+                </Alert>
+                {editorSettings.isEditor && <BlogEditorButtons onlySave saveButtonPressed={saveAll} lastToggle={true} index={blogPost.content.length}/>}
+                {editorSettings.isEditor && showSaveWindow && <BlogSave setShow={setShowSaveWindow}/>}
+            </div>
+        )
+    }
+
     return (
         <div>
             <BlogContext.Provider value={{blogPost,setBlogPost:setPost}}>
@@ -172,7 +186,7 @@ function Blog({edit}:Props) {
                         <BlogContent setEditorSettings={setEditorSettings} editorSettings={editorSettings} key={Math.random()*100} content={item} index={index} />
                     )
                 })}
-                {editorSettings.isEditor && <BlogEditorButtons saveButtonPressed={saveAll} lastToggle={true} index={blogPost.content.length}/>}
+                {editorSettings.isEditor && <BlogEditorButtons onlySave={false} saveButtonPressed={saveAll} lastToggle={true} index={blogPost.content.length}/>}
                 {editorSettings.isEditor && showSaveWindow && <BlogSave setShow={setShowSaveWindow}/>}
             </BlogContext.Provider>
         </div>

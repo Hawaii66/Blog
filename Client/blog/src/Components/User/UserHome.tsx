@@ -3,7 +3,7 @@ import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext'
-import { useQuery } from '../../Utils/Hooks';
+import { useQuery, useWindowSize } from '../../Utils/Hooks';
 import BlogPreview from './BlogPreview';
 
 import "./User.css";
@@ -15,6 +15,7 @@ function UserHome() {
     const {user} = useContext(UserContext);
     const location = useLocation();
     const query = useQuery();
+    const [width,heigh] = useWindowSize();
 
     const GetUser = async () => {
         const data = await fetch(`${apiEndPoint}/users/blogs/${query.get("author")}`,{
@@ -34,7 +35,7 @@ function UserHome() {
         GetUser();
     },[]);
 
-    if(user?.id === query.get("author")){
+    if(width > 992 && user?.id === query.get("author")){
         return (
             <div className='Def6090'>
                 <h1>{author?.name}</h1>
