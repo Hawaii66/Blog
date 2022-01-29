@@ -36,7 +36,7 @@ function UserHome() {
 
     if(user?.id === query.get("author")){
         return (
-            <div className='PreviewParent'>
+            <div className='Def6090'>
                 <h1>{author?.name}</h1>
                 <Row className="g-4" xs={1} sm={2} md={3}>
                     {author?.blogs.map((id,inx)=>{
@@ -54,7 +54,7 @@ function UserHome() {
         )
     }
     return (
-        <div className='PreviewParent'>
+        <div className='Def6090'>
             <h1>{author?.name}</h1>
             <Row className="g-4" xs={1} sm={2} md={3}>
                 {author?.blogs.map((id,inx)=>{

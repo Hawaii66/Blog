@@ -42,7 +42,7 @@ function Home() {
 
   return(
       <div className="center">
-          <Row style={{width:"60%"}} className="g-4" xs={1} sm={2} md={2}>
+          <Row className="g-4 Def6090" xs={1} sm={2} md={2}>
                 {previews.map((blog,inx)=>{
                     return(
                         <Col key={inx}>

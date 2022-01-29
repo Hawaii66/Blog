@@ -39,3 +39,22 @@
 .textCenter {
     text-align: center;
 }
+
+.Def4090 {
+    width: 40%;
+    margin: auto;
+}
+
+.Def6090 {
+    width: 60%;
+    margin: auto;
+}
+
+@media screen and (max-width:992px) {
+    .Def6090 {
+        width: 90%;
+    }
+    .Def4090 {
+        width: 90%;
+    }
+}

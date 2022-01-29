@@ -87,7 +87,7 @@ function SearchResults() {
     return (
         <div className="center">
             {results.length > 0 ?
-            <ListGroup className="size-40" defaultActiveKey="#link1">
+            <ListGroup className="Def4090" defaultActiveKey="#link1">
                 {results.map(res=>{
                     if(res.type === "Blog"){
                         return(

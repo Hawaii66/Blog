@@ -22,7 +22,7 @@ function TopNavbar() {
   }
 
   return (
-      <Navbar style={{marginBottom:"2rem",borderBottom:"1px rgba(1,1,1,0.25) solid"}} expand="sm">
+      <Navbar style={{marginBottom:"2rem",borderBottom:"1px rgba(1,1,1,0.25) solid"}} expand="lg">
         <Container>
           <Navbar.Brand href="/">HawaiiDev Blog</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
