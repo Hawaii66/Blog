@@ -1,13 +1,13 @@
 import { createContext } from "react";
 
-interface StaticContext {
+interface StaticContextInterface {
     apiEndPoint:string,
     website:string
 }
 
-export const StaticContext = createContext<StaticContext>(
+export const StaticContext = createContext<StaticContextInterface>(
     {
-        apiEndPoint:"https://hawaii-dev-blog.herokuapp.com",
-        website:"https://www.blog.hawaiidev.net"
+        apiEndPoint:"http://localhost:5000",
+        website:"http://localhost:3000"//"https://www.blog.hawaiidev.net"
     }
 );

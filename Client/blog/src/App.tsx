@@ -87,6 +87,11 @@ function App() {
       }
     }
 
+  const setUserContext = (u:User)=>{
+    console.log("Setting user",u);
+    setUser(u);
+  }
+
   const updateAccessToken = async() => {
     const token = await UpdateAccessToken(refreshToken,apiEndPoint)
     setAccessToken(token);
@@ -95,12 +100,11 @@ function App() {
 
   const pathNeedLogin = () => {
     var found = true;
-    noLoginPaths.map(i => {
-      if(i === window.location.pathname.split("/")[1]){
+    for(var i = 0; i < noLoginPaths.length; i ++){
+      if(noLoginPaths[i] === window.location.pathname.split("/")[1]){
         found = false;
       }
-      return false;
-    });
+    }
     return found;
   }
 
@@ -131,7 +135,7 @@ function App() {
 
   return (
     <div className="App">
-      <UserContext.Provider value={{accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
+      <UserContext.Provider value={{setUser:setUserContext,accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
         Hello World!
         <TopNavbar/>
         <Router><RouterApp/></Router>

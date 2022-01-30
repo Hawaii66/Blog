@@ -16,6 +16,7 @@ type HasRefershTokenType = (token:string) => Promise<boolean>;
 type RemoveRefreshTokenType = (token:string) => Promise<void>;
 type AddBlogType = (userID:string,blogID:string) => Promise<void>;
 type AddImageType = (userID:string,imgID:string) => Promise<void>;
+type EditUserType = (userID:string,edits:{name:string}) => Promise<User|null>;
 
 export const GetAllUsers:GetAll = async ()=>{
     var all:User[]|null = await users.find();
@@ -56,6 +57,16 @@ export const UserAddBlog:AddBlogType = async (userID,blogID) => {
     blogs.push(blogID);
     user.blogs = blogs;
     await users.findOneAndUpdate({id:userID},{$set:user});
+}
+
+export const EditUser:EditUserType = async(userID,userSettings)=>{
+    var user:User = await users.findOne({microsoftID:userID});
+    if(user === null){return null;}
+
+    user.name = userSettings.name;
+
+    await users.findOneAndUpdate({microsoftID:userID},{$set:user});
+    return user;
 }
 
 export const UserAddImage:AddImageType = async (userID,imgID)=>{

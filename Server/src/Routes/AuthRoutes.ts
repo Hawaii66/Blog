@@ -1,6 +1,6 @@
 import {Express, Request, Response, NextFunction} from "express";
 import { users } from "../Database/DatabaseAPI";
-import { CreateUser, GetAllUsers, GetUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
+import { CreateUser, EditUser, GetAllUsers, GetUser, GetUserEmail, GetUserMicrosoftID, HasToken, RemoveToken, SetToken, UserIDExists } from "../Database/AccountDB";
 import { TokenUser, User } from "../Interfaces/UserInterface";
 import { SearchUserNames } from "../Utils/TextSearch";
 const bcrypt = require("bcrypt");
@@ -115,6 +115,17 @@ export const AuthRoutes = (app:Express) => {
             const accessToken = GenerateAccessToken(tokenUser);
             res.status(200).json({accessToken:accessToken});
         });
+    });
+
+    app.post("/users/edit",AuthToken,async(req,res)=>{
+        const user = await GetUserMicrosoftID(req.id);
+        if(user === null)
+        {
+            return res.status(400).send("No user found with that ID");
+        }
+
+        var newUser = await EditUser(req.id,{name:req.body.name});
+        res.status(200).json(newUser);
     });
 
     app.post("/users/login/microsoft",async(req,res)=>{
