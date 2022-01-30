@@ -21,3 +21,19 @@ Bugs:
 <li>App.tsx login request sent two times. Because loginrequestsend doesn't happen instantly</li>
 
 </ul>
+
+Deploy Server:
+
+docker build -t hawaiidev/hawaiidevblog:{index} .
+
+docker tag {imageID} registry.heroku.com/hawaii-dev-blog/web
+
+heroku login
+
+docker ps
+
+heroku container:login
+
+heroku container:push web -a hawaii-dev-blog
+
+heroku container:release web
