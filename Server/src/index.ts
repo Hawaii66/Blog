@@ -14,3 +14,6 @@ Routes(app);
 app.listen(PORT,()=>{
     console.log("Listening on: http://localhost:" + PORT);
 });
+
+// IN PACKAGE.JSON
+//"postinstall": "npm run build"

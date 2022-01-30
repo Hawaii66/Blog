@@ -101,6 +101,9 @@
             "*":["src/Interfaces/Custom/*"]
         },
         "typeRoots": ["@types","./node_modules/@types"]
-    }
+    },
+    "include": [
+        "./src/"
+    ]
   }
   
