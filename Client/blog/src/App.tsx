@@ -136,7 +136,6 @@ function App() {
   return (
     <div className="App">
       <UserContext.Provider value={{setUser:setUserContext,accessToken:accessToken,user:user,refreshToken:updateAccessToken}}>
-        Hello World!
         <TopNavbar/>
         <Router><RouterApp/></Router>
       </UserContext.Provider>
