@@ -30,7 +30,7 @@ function Edit() {
         }
 
         GetUser();
-    },[]);
+    },[apiEndPoint,query,user]);
 
     if(loading){
         return(

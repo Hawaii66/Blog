@@ -1,8 +1,6 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { BlogContext, CloudSave, EditorSettings } from './Blog';
 import { BlogImageInterface, BlogInterface } from '../../Interfaces/BlogInterface'
-import BlogImageModal from './BlogImageModal';
-import BlogContent from './BlogContent';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext';
 
@@ -109,15 +107,16 @@ function BlogImage({image, min, dir, editorSettings, index}:Props) {
             title:blogPost.title
         }
 
+        var img:BlogImageInterface|null = null;
         if(dir === "left"){
-            var img = blogPost.content[index].imgLeft;
+            img = blogPost.content[index].imgLeft;
             if(img === null){return;}
             img.sizeX = imgX;
             img.sizeY = imgY;
             
             newBlog.content[index].imgLeft = img;
         }else{
-            var img = blogPost.content[index].imgRight;
+            img = blogPost.content[index].imgRight;
             if(img === null){return;}
             img.sizeX = imgX;
             img.sizeY = imgY;

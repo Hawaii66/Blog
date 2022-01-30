@@ -1,14 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Blog from './Components/Blog/Blog';
+import React, { useContext, useState } from 'react';
 import MicrosoftLogin from 'react-microsoft-login';
 import { User } from './Interfaces/UserInterface';
 import { UserContext } from './Contexts/UserContext';
 import { StaticContext } from './Contexts/StaticContext';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { useQuery } from './Utils/Hooks';
-import UserHome from './Components/User/UserHome';
+import { BrowserRouter as Router } from 'react-router-dom';
 import RouterApp from './Components/RouterApp';
-import { Spinner } from 'react-bootstrap';
 import TopNavbar from './Components/TopNavbar';
 
 import "./App.css";
@@ -63,9 +59,8 @@ function App() {
 
       var loginResult = await GetUserTokens(sendData, apiEndPoint);
 
-      var newUser:User|null = null;
       if(loginResult === null){
-        newUser = await CreateUser(data, apiEndPoint);
+        await CreateUser(data, apiEndPoint);
         loginResult = await GetUserTokens(sendData, apiEndPoint);
         if(loginResult === null){return "";}
       }
@@ -104,6 +99,7 @@ function App() {
       if(i === window.location.pathname.split("/")[1]){
         found = false;
       }
+      return false;
     });
     return found;
   }

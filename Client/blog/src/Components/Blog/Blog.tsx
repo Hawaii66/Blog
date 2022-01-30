@@ -1,14 +1,13 @@
 import React, { createContext, useState, useEffect, useContext } from 'react'
-import { Container, Row, Col, Spinner, Alert } from 'react-bootstrap'
+import { Alert } from 'react-bootstrap'
 import { BlogInterface } from '../../Interfaces/BlogInterface';
 import BlogContent from './BlogContent';
 
 import "./Blog.css";
 import BlogEditorButtons from './BlogEditorButtons';
 import BlogSave from './BlogSave';
-import { UserContext } from '../../Contexts/UserContext';
 import { StaticContext } from '../../Contexts/StaticContext';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery, useWindowSize } from '../../Utils/Hooks';
 import Loading from '../Loading';
 
@@ -88,7 +87,7 @@ function Blog({edit}:Props) {
     const [showSaveWindow, setShowSaveWindow] = useState(false);
     const [loading,setLoading] = useState(true);
 
-    const [width, height] = useWindowSize();
+    const [width] = useWindowSize();
 
     let query = useQuery();
 
@@ -105,8 +104,7 @@ function Blog({edit}:Props) {
     });
     const [user, setUser] = useState("");
     
-    const { apiEndPoint,website } = useContext(StaticContext);
-    const {accessToken,refreshToken} = useContext(UserContext);
+    const { apiEndPoint } = useContext(StaticContext);
 
     useEffect(()=>{
         const getBlog = async () => {
@@ -125,7 +123,7 @@ function Blog({edit}:Props) {
             }
         }
         getBlog();
-    },[]);
+    },[apiEndPoint, blogPost.id, query]);
 
     const setPost = (post:BlogInterface) => {
         var temp:BlogInterface = {

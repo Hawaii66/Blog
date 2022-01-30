@@ -1,5 +1,5 @@
 import React, {useRef,useContext, useState} from 'react'
-import { Modal, Button, Form, Dropdown } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext';
 import { BlogInterface } from '../../Interfaces/BlogInterface';

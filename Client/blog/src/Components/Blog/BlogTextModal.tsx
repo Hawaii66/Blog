@@ -1,9 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from 'react'
-import { Modal, Button, Form, Row, Col, Container } from 'react-bootstrap';
-import { StaticContext } from '../../Contexts/StaticContext';
-import { UserContext } from '../../Contexts/UserContext';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { BlogImageInterface, BlogInterface } from '../../Interfaces/BlogInterface';
-import { BlogContext, CloudSave } from './Blog';
+import { BlogContext } from './Blog';
 import ImageSelect from './ImageSelect';
 
 export interface Props{
@@ -15,23 +13,17 @@ function BlogTextModal({setShow, index}:Props) {
     const [unSavedBlog, setUnSaved] = useState<BlogInterface|null>(null);
  
     const {blogPost,setBlogPost} = useContext(BlogContext);
-    const {apiEndPoint} = useContext(StaticContext);
-    const {accessToken,refreshToken} = useContext(UserContext);
 
     const textRef = useRef<HTMLTextAreaElement>(null);
     const titleRef = useRef<HTMLInputElement>(null);
-    const fileInputRefLeft = useRef<HTMLInputElement>(null);
-    const fileInputRefRight = useRef<HTMLInputElement>(null);
     const leftImgRef = useRef<HTMLInputElement>(null);
     const rightImgRef = useRef<HTMLInputElement>(null);
-    const leftAltRef = useRef<HTMLInputElement>(null);
-    const rightAltRef = useRef<HTMLInputElement>(null);
 
     const updateShowSettings = (b:boolean) => {
         setShow(b);
     }
 
-    const save = async () => {
+    /*const save = async () => {
         if(setBlogPost === null || textRef === null || textRef.current === null || textRef.current.value === null){return;}
         if(titleRef === null || titleRef.current === null || titleRef.current.value === null){return;}
         if(leftImgRef === null || leftImgRef.current === null || leftImgRef.current.value === null){return;}
@@ -82,7 +74,7 @@ function BlogTextModal({setShow, index}:Props) {
         setShow(false);
         setBlogPost(info);
         //setBlogPost(await CloudSave(info,apiEndPoint,accessToken,refreshToken));;
-    }
+    }*/
 
     const CloudSave = async () =>{
         if(textRef === null || textRef.current === null || textRef.current.value === null){return;}
@@ -124,9 +116,9 @@ function BlogTextModal({setShow, index}:Props) {
         titleRef.current.value = info.content[index].title;
         leftImgRef.current.checked = info.content[index].imgLeft !== null;
         rightImgRef.current.checked = info.content[index].imgRight !== null;
-    },[]);
+    },[blogPost,index]);
 
-    const postImage = async(dir:"left"|"right") => {
+    /*const postImage = async(dir:"left"|"right") => {
         var fileInputRef = fileInputRefLeft;
         if(dir === "right"){
             fileInputRef = fileInputRefRight;
@@ -144,7 +136,7 @@ function BlogTextModal({setShow, index}:Props) {
 
         result = await result.json();
         return "http://localhost:5000"+result.filePath;
-    }
+    }*/
 
     const ChangeImage = (img:BlogImageInterface|null,dir:"Left"|"Right") => {
         if(blogPost === null){return;}
@@ -175,7 +167,7 @@ function BlogTextModal({setShow, index}:Props) {
 
     useEffect(()=>{
         setUnSaved(blogPost);
-    },[])
+    },[blogPost])
     
     return (
         <Modal dialogClassName="ModalSize" show={true} onHide={cancelSettings}>

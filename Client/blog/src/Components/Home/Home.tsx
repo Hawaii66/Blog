@@ -16,15 +16,13 @@ function Home() {
       });
 
       if(results.status !== 200){
-        console.log("EWrror");
         return;
       }
-      console.log("test");
       setPreviews(await results.json());
     }
 
     GetPreviews();
-  },[]);
+  },[apiEndPoint]);
 
   if(previews === null){
     return(

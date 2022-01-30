@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useRef, useState, useContext, useEffect, useCallback } from 'react';
 import { Form, Row,Col, Container, Button, Offcanvas, Card } from 'react-bootstrap';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { UserContext } from '../../Contexts/UserContext';
@@ -96,23 +96,25 @@ function ImageSelect({img,setImg,dir}:Props) {
         GetLinks();
     }
 
-    const GetLinks = async() => {
-        if(blogPost === null){return;}
+    const GetLinks = useCallback(
+        async()=>{
+            if(blogPost === null){return;}
 
-        var result:any = await fetch(`${apiEndPoint}/users/get/images/${blogPost.author}`,{
-            method:"GET"
-        });
+            var result:any = await fetch(`${apiEndPoint}/users/get/images/${blogPost.author}`,{
+                method:"GET"
+            });
 
-        if(result.status === 200){
-            var data = await result.json();
+            if(result.status === 200){
+                var data = await result.json();
 
-            setImgLinks(data);
-        }
-    }
+                setImgLinks(data);
+            }
+        },[apiEndPoint,blogPost]
+    );
 
     useEffect(()=>{
         GetLinks();
-    },[]);
+    },[GetLinks]);
 
     if(img === null){
         return(
