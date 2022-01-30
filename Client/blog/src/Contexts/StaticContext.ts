@@ -7,7 +7,7 @@ interface StaticContext {
 
 export const StaticContext = createContext<StaticContext>(
     {
-        apiEndPoint:"http://localhost:5000",
-        website:"http://localhost:3000"
+        apiEndPoint:"https://hawaii-dev-blog.herokuapp.com/",
+        website:"https://www.blog.hawaiidev.net/"
     }
 );
