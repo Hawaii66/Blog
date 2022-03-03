@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { BlogContentInterface } from '../../Interfaces/BlogInterface'
+import { ValidateHTML } from '../../Utils/ParseContent'
 import { EditorSettings } from './Blog'
 import BlogEditorButtons from './BlogEditorButtons'
 import BlogImage from './BlogImage'
@@ -18,6 +19,8 @@ function BlogContent({content, screenWidth, index, editorSettings, setEditorSett
     //FIrst correct huffman: "TTTWWhH1111111111111111111111111111111111111111111111111111"
     const [showPModal, setShowP] = useState(false);
 
+    const validText = useMemo(()=>ValidateHTML(content.text),[content]);
+
     if(screenWidth < 992){
         return(
             <div style={{marginTop:"2rem"}}>
@@ -29,7 +32,7 @@ function BlogContent({content, screenWidth, index, editorSettings, setEditorSett
                         
                     </div>
                     <BlogImage min index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
-                    <p style={{minHeight:"120px"}}>{content.text}</p>
+                    <p style={{minHeight:"120px"}} dangerouslySetInnerHTML={{__html:validText}}></p>
                     <BlogImage min index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
                 </div>
             </div>
@@ -48,7 +51,7 @@ function BlogContent({content, screenWidth, index, editorSettings, setEditorSett
                 </div>
                 <BlogImage min={false} index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
                 <BlogImage min={false} index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
-                <p onClick={()=>setShowP(true)} style={{minHeight:"120px"}}>{content.text}</p>
+                <p onClick={()=>setShowP(true)} style={{minHeight:"120px"}} dangerouslySetInnerHTML={{__html:validText}}></p>
                 {showPModal && editorSettings.isEditor && <BlogTextModal index={index} setShow={setShowP} />}
             </div>
         </div>
