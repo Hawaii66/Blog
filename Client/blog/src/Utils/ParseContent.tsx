@@ -8,7 +8,10 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
         "<h4>",
         "<h5>",
         "<b>",
-        "<i>"
+        "<i>",
+        "ul",
+        "ol",
+        "li"
     ];
     const validHTMLTagsNoClose:string[] = [
         "<br>"
