@@ -3,6 +3,7 @@ import { Card, Placeholder } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
 import { StaticContext } from '../../Contexts/StaticContext';
 import { BlogPreviewInterface } from '../../Interfaces/BlogInterface';
+import { ValidateHTML } from '../../Utils/ParseContent';
 
 import "./BlogPreview.css";
 
@@ -15,7 +16,9 @@ export interface Props{
 function BlogPreview({blogID,renderAuthor,edit}:Props) {
     const [info,setInfo] = useState<BlogPreviewInterface|null>(null);
 
-    const {website,apiEndPoint} = useContext(StaticContext);
+    const parsedInfo = ValidateHTML(info !== null ? info.text : "");
+
+    const {apiEndPoint} = useContext(StaticContext);
 
     useEffect(() => {
         getInfo();
@@ -72,8 +75,8 @@ function BlogPreview({blogID,renderAuthor,edit}:Props) {
                     </Card.Link>
                 </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">{new Date(info.date).toLocaleString("sw-SW")}</Card.Subtitle>
-                <Card.Text>
-                    {info.text}
+                <Card.Text className="text" dangerouslySetInnerHTML={{__html:parsedInfo}}>
+                    
                 </Card.Text>
                 <Card.Footer style={{display:"flex",justifyContent:"center"}}>
                     <Card.Link as="div" ><Link to={link}>Läs Mer</Link></Card.Link>

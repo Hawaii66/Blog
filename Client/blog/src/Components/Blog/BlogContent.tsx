@@ -32,7 +32,7 @@ function BlogContent({content, screenWidth, index, editorSettings, setEditorSett
                         
                     </div>
                     <BlogImage min index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
-                    <p style={{minHeight:"120px"}} dangerouslySetInnerHTML={{__html:validText}}></p>
+                    <p style={{minHeight:"120px"}} className="text" dangerouslySetInnerHTML={{__html:validText}}></p>
                     <BlogImage min index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
                 </div>
             </div>
@@ -51,7 +51,7 @@ function BlogContent({content, screenWidth, index, editorSettings, setEditorSett
                 </div>
                 <BlogImage min={false} index={index} editorSettings={editorSettings} image={content.imgLeft} dir="left" />
                 <BlogImage min={false} index={index} editorSettings={editorSettings} image={content.imgRight} dir="right" />
-                <p onClick={()=>setShowP(true)} style={{minHeight:"120px"}} dangerouslySetInnerHTML={{__html:validText}}></p>
+                <p onClick={()=>setShowP(true)} style={{minHeight:"120px"}} className="text" dangerouslySetInnerHTML={{__html:validText}}></p>
                 {showPModal && editorSettings.isEditor && <BlogTextModal index={index} setShow={setShowP} />}
             </div>
         </div>

@@ -12,8 +12,8 @@ export interface Props{
 
 function BlogSave({setShow}:Props) {
     const [lang,setLang] = useState<Language>({
-        code:"",
-        name:""
+        code:"en",
+        name:"English"
     });
     
     const {blogPost, setBlogPost} = useContext(BlogContext);
@@ -34,10 +34,13 @@ function BlogSave({setShow}:Props) {
             author:blogPost.author,
             content:[...blogPost.content],
             language:lang,
-            publishDate:Date.now(),
+            publishDate:blogPost.publishDate,
+            lastUpdated:blogPost.lastUpdated,
             title:name,
             id:blogPost.id
         }
+
+        console.log(new Date(info.publishDate).toLocaleString("sw-SE"));
 
         var newBlog = await CloudSave(info, apiEndPoint, accessToken, refreshToken);
         setBlogPost(newBlog);

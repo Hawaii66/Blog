@@ -50,6 +50,36 @@
     margin: auto;
 }
 
+p.text * {
+    margin: 0;
+    padding: 0;
+}
+
+p.text ol li {
+    list-style: decimal;
+}
+
+p.text li::before {
+    width: 0rem;
+}
+
+p.text ul li {
+    list-style: circle;
+}
+
+p.text tr,
+th {
+    border-color: black;
+    margin: 0.5em !important;
+    padding: 0.25em !important;
+    border-width: 0.1rem;
+}
+
+p.text tbody {
+    border-color: black;
+    border-width: 0.20rem;
+}
+
 @media screen and (max-width:992px) {
     .Def6090 {
         width: 90%;

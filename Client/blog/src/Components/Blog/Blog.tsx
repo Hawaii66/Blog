@@ -100,6 +100,7 @@ function Blog({edit}:Props) {
             name:"English"
         },
         publishDate:0,
+        lastUpdated:0,
         title:""
     });
     const [user, setUser] = useState("");
@@ -130,6 +131,7 @@ function Blog({edit}:Props) {
             title:post.title,
             author:post.author,
             publishDate:post.publishDate,
+            lastUpdated:post.lastUpdated,
             language:post.language,
             content:[...post.content],
             id:post.id
@@ -167,16 +169,20 @@ function Blog({edit}:Props) {
         )
     }
 
+    console.log("Render",{...blogPost});
+
     return (
         <div>
-            <BlogContext.Provider value={{blogPost,setBlogPost:setPost}}>
+            <BlogContext.Provider value={{blogPost,setBlogPost:(b)=>{console.log({...b});setPost(b)}}}>
                 <h1 className="center">{blogPost.title}</h1>
                 <h5 className="center">
-                    <Link to={`/?author=${blogPost.author}`}>{user}</Link>
+                    <Link to={`/?author=${blogPost.author}`}>{user}</Link> : {blogPost.language.name}
                 </h5>
+                <p className="center" style={{marginBottom:"0rem"}}>
+                    Created at: {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
+                </p>
                 <p className="center">
-                    {blogPost.language.name}{`: `} 
-                    {new Date(blogPost.publishDate).toLocaleString("sw-SW")}
+                    Last update: {new Date(blogPost.lastUpdated).toLocaleString("sw-SW")}    
                 </p>
 
                 {blogPost.content.map((item,index)=>{
@@ -202,10 +208,12 @@ function GetBlogWithID(id:string, apiEndPoint:string):Promise<BlogInterface>{
 type CloudSaveType = (blogPost:BlogInterface, apiEndPoint:string,accessToken:string,updateRefresh:()=>Promise<string>) => Promise<BlogInterface>
 
 export const CloudSave:CloudSaveType = async(blogPost,apiEndPoint,accessToken,updateRefresh)=> {
-    const data = {
+    var data = {
         blog:blogPost,
         id:blogPost.id
     }
+
+    data.blog.lastUpdated = Date.now();
     
     var saveResult = await fetch(`${apiEndPoint}/blog/save`,{
         method:"POST",

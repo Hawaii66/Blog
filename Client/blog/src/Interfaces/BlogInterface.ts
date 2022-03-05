@@ -4,6 +4,7 @@ export interface BlogInterface {
     title:string,
     author:string,
     publishDate:number,
+    lastUpdated:number,
     language:Language,
     content:BlogContentInterface[],
     id:string

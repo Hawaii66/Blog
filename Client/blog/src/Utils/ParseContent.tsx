@@ -11,7 +11,10 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
         "<i>",
         "<ul>",
         "<ol>",
-        "<li>"
+        "<li>",
+        "<table>",
+        "<tr>",
+        "<th>"
     ];
     const validHTMLTagsNoClose:string[] = [
         "<br>"
@@ -22,7 +25,7 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
     var collectingTag = false;
     var closingTag = false;
 
-    content = content.replaceAll("\n","<br>");
+    //content = content.replaceAll("\n","<br>");
 
     for(var i = 0; i < content.length; i ++){
         if(content[i] === "<")

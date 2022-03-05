@@ -91,7 +91,8 @@ function BlogTextModal({setShow, index}:Props) {
             content:[...blogPost.content],
             id:blogPost.id,
             language:blogPost.language,
-            publishDate:blogPost.publishDate
+            publishDate:blogPost.publishDate,
+            lastUpdated:blogPost.lastUpdated
         }
 
         info.content[index] = unSavedBlog.content[index];
@@ -147,6 +148,7 @@ function BlogTextModal({setShow, index}:Props) {
             id:blogPost.id,
             language:blogPost.language,
             publishDate:blogPost.publishDate,
+            lastUpdated:blogPost.lastUpdated,
             title:blogPost.title
         }
 
@@ -182,7 +184,7 @@ function BlogTextModal({setShow, index}:Props) {
                         </Form.Group>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Label>Text</Form.Label>
-                            <Form.Control defaultValue={blogPost === null ? "" : blogPost.content[index].text} ref={textRef} as="textarea" rows={6} />
+                            <Form.Control defaultValue={blogPost === null ? "" : blogPost.content[index].text} ref={textRef} as="textarea" rows={12} />
                         </Form.Group>
                         <ImageSelect dir="Left" img={(unSavedBlog === null) ? null : unSavedBlog.content[index].imgLeft} setImg={(i)=>ChangeImage(i,"Left")}/>
                         <ImageSelect dir="Right" img={(unSavedBlog === null) ? null : unSavedBlog.content[index].imgRight} setImg={(i)=>ChangeImage(i,"Right")}/>

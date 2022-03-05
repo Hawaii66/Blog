@@ -17,8 +17,10 @@ export const BlogRoutes = (app:Express) => {
             id:req.body.id,
             language:dataBlog.language,
             publishDate:dataBlog.publishDate,
+            lastUpdated:dataBlog.lastUpdated,
             title:dataBlog.title
         }
+
         /*const user = await GetUserMicrosoftID(req.body.id)
         if(user === null){return;}
         console.log("Uesr not nukk");
@@ -157,6 +159,7 @@ export const BlogRoutes = (app:Express) => {
                 name:"English"
             },
             publishDate:Date.now(),
+            lastUpdated:Date.now(),
             title:"Temporär titel på din nya blog"
         }
 

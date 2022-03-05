@@ -104,6 +104,7 @@ function BlogImage({image, min, dir, editorSettings, index}:Props) {
             id:blogPost.id,
             language:blogPost.language,
             publishDate:blogPost.publishDate,
+            lastUpdated:blogPost.lastUpdated,
             title:blogPost.title
         }
 
