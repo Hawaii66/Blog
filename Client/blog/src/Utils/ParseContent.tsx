@@ -14,7 +14,8 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
         "<li>",
         "<table>",
         "<tr>",
-        "<th>"
+        "<th>",
+        "<math>"
     ];
     const validHTMLTagsNoClose:string[] = [
         "<br>"
@@ -22,8 +23,11 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
 
     var openTags:string[] = [];
     var tag = "";
+    var tagValue = "";
+    var collectiongValue = false;
     var collectingTag = false;
     var closingTag = false;
+    var openTagStart = 0;
 
     //content = content.replaceAll("\n","<br>");
 
@@ -33,6 +37,10 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
             if(content[i + 1] === "/")
             {
                 closingTag = true;
+
+                collectiongValue = false;
+            }else{
+                openTagStart = i;
             }
 
             collectingTag = true;
@@ -43,16 +51,30 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
             tag += content[i];
         }
 
+        if(collectiongValue)
+        {
+            tagValue += content[i];
+        }
+
         if(content[i] === ">")
         {
             if(closingTag)
             {
                 if(openTags[openTags.length - 1] === tag.replace("/",""))
                 {
+                    if(openTags[openTags.length - 1] === "<math>")
+                    {
+                        content = content.slice(0, openTagStart + 1) + `Equation value="${tagValue}"/` + content.slice(i);
+                        i += `Equation value="${tagValue}"/`.length;
+                    }
+
                     openTags.pop();
                     tag = "";
                     closingTag = false;
                     collectingTag = false;
+
+                    //Parse <math>2^3</math>
+                    tagValue = "";
                 }else{
                     return "<h1>Error, wrong closing tag for the current open tag</h1>";
                 }
@@ -63,10 +85,14 @@ export const ValidateHTML:ValidateHTMLType = (content) => {
                     tag = "";
                     closingTag = false;
                     collectingTag = false;
+                    collectiongValue = true;
+                    tagValue = "";
                 }else if(validHTMLTagsNoClose.includes(tag)){
                     tag = "";
                     closingTag = false;
                     collectingTag = false;
+                    collectiongValue = true;
+                    tagValue = "";
                 }
                 else{
                     return "<h1>Sneaky! that is not a allowed html tag<h1>";
